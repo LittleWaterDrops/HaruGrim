@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yh.model.dao.EmailVerificationsDao">
     <!-- 이메일 인증 기록 추가 -->
-    <insert id="insertEmailVerification" parameterType="com.yh.model.dto.EmailVerifications">
+    <insert id="saveEmailVerification" parameterType="com.yh.model.dto.EmailVerifications">
         INSERT INTO email_verifications (user_id, verification_token, expires_at, created_at)
         VALUES (#{userId}, #{verificationToken}, #{expiresAt}, NOW());
     </insert>
@@ -14,8 +14,4 @@
         SELECT * FROM email_verifications WHERE verification_token = #{verificationToken};
     </select>
 
-    <!-- 이메일 인증 완료 -->
-    <update id="updateEmailVerified">
-        UPDATE users SET email_verified = TRUE WHERE id = #{userId};
-    </update>
 </mapper>

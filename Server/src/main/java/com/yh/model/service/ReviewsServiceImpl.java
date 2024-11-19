@@ -3,7 +3,6 @@ package com.yh.model.service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yh.model.dao.ReviewsDao;
@@ -12,8 +11,12 @@ import com.yh.model.dto.Reviews;
 @Service
 public class ReviewsServiceImpl implements ReviewsService {
 
-	@Autowired
 	private ReviewsDao reviewsDao;
+
+	public ReviewsServiceImpl(ReviewsDao reviewsDao) {
+		super();
+		this.reviewsDao = reviewsDao;
+	}
 
 	@Override
 	public Reviews getReviewById(long id) {
@@ -27,7 +30,7 @@ public class ReviewsServiceImpl implements ReviewsService {
 
 	@Override
 	public Reviews createReview(Reviews review) {
-		reviewsDao.saveReview(review); // 리뷰 저장
+		reviewsDao.createReview(review); // 리뷰 저장
 		return review;
 	}
 

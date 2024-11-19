@@ -9,7 +9,7 @@ public interface UsersDao {
 
 	Users findByEmail(String email);
 
-	int saveUser(Users user);
+	int createUser(Users user);
 
 	int updateUser(Users user);
 

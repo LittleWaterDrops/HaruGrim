@@ -10,7 +10,7 @@ public interface ReviewsDao {
 
 	List<Reviews> findByUserId(long userId);
 
-	int saveReview(Reviews review);
+	int createReview(Reviews review);
 
 	int updateReview(Reviews review);
 
