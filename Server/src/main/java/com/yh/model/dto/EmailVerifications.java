@@ -2,7 +2,7 @@ package com.yh.model.dto;
 
 import java.util.Date;
 
-public class EmailVarifications {
+public class EmailVerifications {
 	private long id;
 	private long userId; // 사용자 id(Users id와 연결)
 	private String verificationCode; // 이메일 인증 토큰
@@ -10,11 +10,11 @@ public class EmailVarifications {
 	private Date createdAt; // 생성 시각
 	private Date expiresAt; // 만료 시각
 	
-	public EmailVarifications() {
+	public EmailVerifications() {
 
 	}
 
-	public EmailVarifications(long id, long userId, String verificationCode, boolean verified, Date createdAt,
+	public EmailVerifications(long id, long userId, String verificationCode, boolean verified, Date createdAt,
 			Date expiresAt) {
 		super();
 		this.id = id;

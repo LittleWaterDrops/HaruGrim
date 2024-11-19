@@ -15,8 +15,6 @@ public class Reviews {
 		
 	}
 
-	
-
 	public Reviews(long id, long userId, String title, String content, Date createdAt, Date updatedAt, Date deletedAt) {
 		super();
 		this.id = id;
@@ -92,9 +90,5 @@ public class Reviews {
 		return "Reviews [id=" + id + ", userId=" + userId + ", title=" + title + ", content=" + content + ", createdAt="
 				+ createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
 	}
-
-	
-	
-	
 
 }
