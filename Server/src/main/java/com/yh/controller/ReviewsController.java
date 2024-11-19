@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yh.model.dto.Reviews;
 import com.yh.model.service.ReviewsService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/reviews")
 public class ReviewsController {
@@ -28,7 +30,7 @@ public class ReviewsController {
 
     // 회고 생성
     @PostMapping
-    public ResponseEntity<Reviews> createReview(@RequestBody Reviews review) {
+    public ResponseEntity<Reviews> createReview(@Valid @RequestBody Reviews review) {
         Reviews createdReview = reviewsService.createReview(review);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }

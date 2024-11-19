@@ -2,12 +2,24 @@ package com.yh.model.dto;
 
 import java.util.Date;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class Reviews {
 	private long id;
+
+	@NotNull(message = "userId Null일 수 없습니다!")
 	private long userId; // 사용자 id(Users id와 연결)
+
+	@NotBlank(message = "title Null 일 수 없습니다!")
 	private String title; // 회고 제목
+
+	@NotBlank(message = "content Null 일 수 없습니다!")
 	private String content; // 회고 내용
-	private String imageUrls;
+
+	@NotBlank(message = "imageUrls Null 일 수 없습니다!")
+	private String imageUrls; // 이미지 url을 JSON 리스트로 저장.
+	
 	private Date createdAt; // 생성 시각
 	private Date updatedAt; // 수정 시각
 	private Date deletedAt; // 삭제 시각
