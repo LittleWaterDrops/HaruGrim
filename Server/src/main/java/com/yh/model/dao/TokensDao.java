@@ -9,7 +9,7 @@ public interface TokensDao {
 
 	List<Tokens> findByUserId(long userId);
 
-	int saveToken(Tokens token);
+	int createToken(Tokens token);
 
 	int deleteToken(long id);
 }

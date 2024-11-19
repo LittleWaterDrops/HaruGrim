@@ -1,6 +1,5 @@
 package com.yh.model.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yh.model.dao.EmailVerificationsDao;
@@ -9,8 +8,12 @@ import com.yh.model.dto.EmailVerifications;
 @Service
 public class EmailVerificationsServiceImpl implements EmailVerificationsService {
 
-	@Autowired
-	private EmailVerificationsDao emailVerificationsDao;
+	private final EmailVerificationsDao emailVerificationsDao;
+
+	// 생성자 주입
+	public EmailVerificationsServiceImpl(EmailVerificationsDao emailVerificationsDao) {
+		this.emailVerificationsDao = emailVerificationsDao;
+	}
 
 	@Override
 	public EmailVerifications getEmailVerificationById(long id) {
@@ -19,7 +22,7 @@ public class EmailVerificationsServiceImpl implements EmailVerificationsService 
 
 	@Override
 	public EmailVerifications getEmailVerificationByUserId(long userId) {
-		return emailVerificationsDao.findByUserId(userId);
+		return emailVerificationsDao.getEmailVerificationByToken(userId);
 	}
 
 	@Override

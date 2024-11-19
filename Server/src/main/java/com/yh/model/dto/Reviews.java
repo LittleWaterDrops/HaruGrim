@@ -7,20 +7,23 @@ public class Reviews {
 	private long userId; // 사용자 id(Users id와 연결)
 	private String title; // 회고 제목
 	private String content; // 회고 내용
+	private String imageUrls;
 	private Date createdAt; // 생성 시각
 	private Date updatedAt; // 수정 시각
 	private Date deletedAt; // 삭제 시각
-	
+
 	public Reviews() {
-		
+
 	}
 
-	public Reviews(long id, long userId, String title, String content, Date createdAt, Date updatedAt, Date deletedAt) {
+	public Reviews(long id, long userId, String title, String content, String imageUrls, Date createdAt, Date updatedAt,
+			Date deletedAt) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.title = title;
 		this.content = content;
+		this.imageUrls = imageUrls;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
@@ -73,7 +76,6 @@ public class Reviews {
 	public void setDeletedAt(Date deletedAt) {
 		this.deletedAt = deletedAt;
 	}
-	
 
 	public String getTitle() {
 		return title;
@@ -83,12 +85,19 @@ public class Reviews {
 		this.title = title;
 	}
 
+	public String getImageUrls() {
+		return imageUrls;
+	}
 
+	public void setImageUrls(String imageUrls) {
+		this.imageUrls = imageUrls;
+	}
 
 	@Override
 	public String toString() {
-		return "Reviews [id=" + id + ", userId=" + userId + ", title=" + title + ", content=" + content + ", createdAt="
-				+ createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt + "]";
+		return "Reviews [id=" + id + ", userId=" + userId + ", title=" + title + ", content=" + content + ", imageUrls="
+				+ imageUrls + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt
+				+ "]";
 	}
 
 }

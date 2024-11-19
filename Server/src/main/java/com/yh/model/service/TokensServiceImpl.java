@@ -2,7 +2,6 @@ package com.yh.model.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yh.model.dao.TokensDao;
@@ -11,8 +10,12 @@ import com.yh.model.dto.Tokens;
 @Service
 public class TokensServiceImpl implements TokensService {
 
-	@Autowired
 	private TokensDao tokensDao;
+
+	public TokensServiceImpl(TokensDao tokensDao) {
+		super();
+		this.tokensDao = tokensDao;
+	}
 
 	@Override
 	public Tokens getTokenById(long id) {
@@ -26,7 +29,7 @@ public class TokensServiceImpl implements TokensService {
 
 	@Override
 	public Tokens saveToken(Tokens token) {
-		tokensDao.saveToken(token);
+		tokensDao.createToken(token);
 		return token;
 	}
 
