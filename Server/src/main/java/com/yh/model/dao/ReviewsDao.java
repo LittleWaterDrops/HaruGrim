@@ -6,11 +6,12 @@ import java.util.List;
 import com.yh.model.dto.Reviews;
 
 public interface ReviewsDao {
+	
+	int createReview(Reviews review);
+
 	Reviews findById(long id);
 
 	List<Reviews> findByUserId(long userId);
-
-	int createReview(Reviews review);
 
 	int updateReview(Reviews review);
 

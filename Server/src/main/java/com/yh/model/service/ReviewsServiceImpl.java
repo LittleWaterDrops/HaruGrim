@@ -10,12 +10,18 @@ import com.yh.model.dto.Reviews;
 
 @Service
 public class ReviewsServiceImpl implements ReviewsService {
-
+	
 	private ReviewsDao reviewsDao;
 
 	public ReviewsServiceImpl(ReviewsDao reviewsDao) {
 		super();
 		this.reviewsDao = reviewsDao;
+	}
+
+	@Override
+	public Reviews createReview(Reviews review) {
+		reviewsDao.createReview(review); // 리뷰 저장
+		return review;
 	}
 
 	@Override
@@ -26,12 +32,6 @@ public class ReviewsServiceImpl implements ReviewsService {
 	@Override
 	public List<Reviews> getReviewsByUserId(long userId) {
 		return reviewsDao.findByUserId(userId);
-	}
-
-	@Override
-	public Reviews createReview(Reviews review) {
-		reviewsDao.createReview(review); // 리뷰 저장
-		return review;
 	}
 
 	@Override
