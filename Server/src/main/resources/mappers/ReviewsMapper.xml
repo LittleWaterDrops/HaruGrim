@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> -->
+<mapper namespace="com.yh.model.dao.ReviewsDao">
+
+    <select id="findById" resultType="com.yh.model.dto.Reviews">
+        SELECT * FROM reviews WHERE id = #{id}
+    </select>
+
+    <select id="findByUserId" resultType="com.yh.model.dto.Reviews">
+        SELECT * FROM reviews WHERE user_id = #{userId}
+    </select>
+
+    <insert id="createReview">
+        INSERT INTO reviews (user_id, title, content, created_at)
+        VALUES (#{userId}, #{title}, #{content}, NOW())
+    </insert>
+
+    <update id="updateReview">
+        UPDATE reviews
+        SET title = #{title}, content = #{content}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteReview">
+        DELETE FROM reviews WHERE id = #{id}
+    </delete>
+
+</mapper>

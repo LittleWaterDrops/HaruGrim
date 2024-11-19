@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> -->
+<mapper namespace="com.yh.model.dao.TokensDao">
+
+    <select id="findByUserId" resultType="com.yh.model.dto.Tokens">
+        SELECT * FROM tokens WHERE user_id = #{userId}
+    </select>
+
+    <insert id="createToken">
+        INSERT INTO tokens (user_id, token_type, token, expires_at, created_at)
+        VALUES (#{userId}, #{tokenType}, #{token}, #{expiresAt}, NOW())
+    </insert>
+
+    <delete id="deleteToken">
+        DELETE FROM tokens WHERE id = #{id}
+    </delete>
+
+</mapper>

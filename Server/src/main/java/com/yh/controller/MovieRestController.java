@@ -65,7 +65,7 @@ public class MovieRestController {
 	@GetMapping("/movie/{id}")
 	public ResponseEntity<?> selectId(@PathVariable("id") int id) throws Exception {
 		Movie movie = movieservice.getMovieById(id);
-		return ResponseEntity.ok(movie);
+		return new ResponseEntity<>(movie, movie != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 
 	// 삽입
@@ -103,6 +103,6 @@ public class MovieRestController {
 	@GetMapping("user/{id}")
 	public ResponseEntity<?> selectUserId(@PathVariable("id") String id) {
 		User user = userservice.getUserById(id);
-		return ResponseEntity.ok(user);
+		return new ResponseEntity<>(user, user != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> -->
+<mapper namespace="com.yh.model.dao.UsersDao">
+
+    <select id="findById" resultType="com.yh.model.dto.Users">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" resultType="com.yh.model.dto.Users">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="findByEmail" resultType="com.yh.model.dto.Users">
+        SELECT * FROM users WHERE email = #{email}
+    </select>
+
+    <insert id="saveUser">
+        INSERT INTO users (username, email, password_hash, created_at)
+        VALUES (#{username}, #{email}, #{passwordHash}, NOW())
+    </insert>
+
+    <update id="updateUser">
+        UPDATE users
+        SET username = #{username}, email = #{email}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+</mapper>
