@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yh.model.dao.UserDao">
+
+    <select id="findUserById" resultType="com.yh.model.dto.User">
+        SELECT id, username, email
+        FROM users
+        WHERE id = #{userId}
+    </select>
+
+    <update id="updateUser">
+        UPDATE users
+        SET username = #{username}, email = #{email}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+</mapper>
