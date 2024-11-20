@@ -7,10 +7,10 @@ import com.yh.model.dto.Reviews;
 public interface ReviewsService {
 	
 	Reviews createReview(Reviews review);
-	
-	Reviews getReviewById(long id);
 
-	List<Reviews> getReviewsByUserId(long userId);
+	List<Reviews> getReviewListByUserId(long userId);
+
+	Reviews getReviewById(long id);
 
 	Reviews updateReview(Reviews review);
 

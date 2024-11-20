@@ -39,6 +39,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body("데이터 제약 조건 위반: " + ex.getMessage());
     }
+    
+    // 리뷰 예외 처리
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
     // 다른 모든 예외를 처리 (예: NullPointerException, IllegalArgumentException 등)
     @ExceptionHandler(Exception.class)
@@ -47,4 +53,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body("서버 오류: " + ex.getMessage());
     }
+    
 }
