@@ -1,87 +1,39 @@
 package com.yh.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.yh.model.dto.LoginRequestUsers;
-import com.yh.model.dto.Users;
-import com.yh.model.service.UsersService;
+import com.yh.model.dto.User;
+import com.yh.model.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private final UserService userService;
 
-    private final UsersService usersService;
-
-    public UserController(UsersService usersService) {
-        this.usersService = usersService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    // 프로필 조회
     @GetMapping("/my")
-    public ResponseEntity<Users> getProfile(HttpSession session) {
+    public ResponseEntity<User> getProfile(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(401).build();
         }
-        Users user = usersService.getUserById(userId);
+        User user = userService.getProfile(userId);
         return ResponseEntity.ok(user);
     }
 
-    // 프로필 수정
     @PatchMapping("/my")
-    public ResponseEntity<Users> updateProfile(@RequestBody Users updatedUser, HttpSession session) {
+    public ResponseEntity<User> updateProfile(@RequestBody User user, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(401).build();
         }
-        updatedUser.setId(userId); // 세션에 저장된 사용자 ID로 수정
-        Users user = usersService.updateUser(updatedUser);
-        return ResponseEntity.ok(user);
-    }
-
-    // 회원 가입
-    @PostMapping("/auth/signup")
-    public ResponseEntity<String> signup(@RequestBody Users newUser) {
-        // 비밀번호 해시화 처리
-        newUser.setPasswordHash(usersService.hashPassword(newUser.getPasswordHash()));
-        usersService.createUser(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원 가입 성공");
-    }
-
-    // 회원 탈퇴
-    @DeleteMapping("/auth/delete")
-    public ResponseEntity<String> deleteAccount(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        usersService.deleteUser(userId);
-        session.invalidate(); // 세션 무효화
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("회원 탈퇴 완료");
-    }
-
-    // 자체 로그인
-    @PostMapping("/auth/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestUsers userCredentials, HttpSession session) {
-        Users user = usersService.getUserByUsernameAndPassword(userCredentials.getUsername(), userCredentials.getPasswordHash());
-        if (user == null) {
-            System.out.println("로그인 실패");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인 실패");
-        }
-        session.setAttribute("userId", user.getId()); // 세션에 사용자 ID 저장
-        System.out.println("로그인 성공");
-        return ResponseEntity.ok("로그인 성공");
-    }
-
-
-    // 로그아웃
-    @GetMapping("/auth/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate(); // 세션 무효화
-        return ResponseEntity.ok("로그아웃 성공");
+        user.setId(userId);
+        User updatedUser = userService.updateProfile(user);
+        return ResponseEntity.ok(updatedUser);
     }
 }
