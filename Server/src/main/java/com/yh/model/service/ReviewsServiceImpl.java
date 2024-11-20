@@ -14,13 +14,12 @@ public class ReviewsServiceImpl implements ReviewsService {
 	private ReviewsDao reviewsDao;
 
 	public ReviewsServiceImpl(ReviewsDao reviewsDao) {
-		super();
 		this.reviewsDao = reviewsDao;
 	}
 
 	@Override
 	public Reviews createReview(Reviews review) {
-		reviewsDao.createReview(review); // 리뷰 저장
+		reviewsDao.createReview(review); // 회고 저장
 		return review;
 	}
 
@@ -36,13 +35,13 @@ public class ReviewsServiceImpl implements ReviewsService {
 
 	@Override
 	public Reviews updateReview(Reviews review) {
-		reviewsDao.updateReview(review); // 리뷰 업데이트
+		reviewsDao.updateReview(review); // 회고 업데이트
 		return review;
 	}
 
 	@Override
 	public void deleteReview(long id) {
 		Date deletedAt = new Date();
-		reviewsDao.deleteReview(id, deletedAt); // 리뷰 소프트 삭제
+		reviewsDao.deleteReview(id, deletedAt); // 회고 삭제
 	}
 }
