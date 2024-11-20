@@ -5,7 +5,7 @@ import com.yh.model.dto.Users;
 public interface UsersDao {
 	Users findById(long id);
 
-	Users findByUsername(String username);
+	Users findByUsernameAndPassword(String username, String passwordHash);
 
 	Users findByEmail(String email);
 

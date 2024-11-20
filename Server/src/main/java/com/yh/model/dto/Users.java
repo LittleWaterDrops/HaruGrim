@@ -7,7 +7,7 @@ public class Users {
 	private String username; // 사용자명
 	private String email; // 이메일
 	private String passwordHash; // 비밀번호(해시처리)
-	private boolean emailVerified; // 이메일 인증 여
+	private boolean emailVerified; // 이메일 인증 여부
 	private String socialProvider; // 소셜 로그인 제공자(구글, 카카오)
 	private String socialId; // 소셜 로그인 id
 	private Date createdAt; // 생성 시간
