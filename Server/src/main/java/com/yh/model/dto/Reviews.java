@@ -1,8 +1,10 @@
 package com.yh.model.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class Reviews {
@@ -17,20 +19,19 @@ public class Reviews {
 	@NotBlank(message = "content Null 일 수 없습니다!")
 	private String content; // 회고 내용
 
-	@NotBlank(message = "imageUrls Null 일 수 없습니다!")
-	private String imageUrls; // 이미지 url을 JSON 리스트로 저장.
-	
+	@NotNull(message = "imageUrls Null일 수 없습니다!")
+	@NotEmpty(message = "imageUrls 리스트는 비어 있을 수 없습니다!")
+	private List<String> imageUrls; // 이미지 url을 리스트로 저장.
+
 	private Date createdAt; // 생성 시각
 	private Date updatedAt; // 수정 시각
 	private Date deletedAt; // 삭제 시각
 
-	public Reviews() {
+	// 기본 생성자
+	public Reviews() {}
 
-	}
-
-	public Reviews(long id, long userId, String title, String content, String imageUrls, Date createdAt, Date updatedAt,
-			Date deletedAt) {
-		super();
+	// 모든 필드를 받는 생성자
+	public Reviews(long id, long userId, String title, String content, List<String> imageUrls, Date createdAt, Date updatedAt, Date deletedAt) {
 		this.id = id;
 		this.userId = userId;
 		this.title = title;
@@ -41,6 +42,7 @@ public class Reviews {
 		this.deletedAt = deletedAt;
 	}
 
+	// Getter, Setter
 	public long getId() {
 		return id;
 	}
@@ -97,11 +99,11 @@ public class Reviews {
 		this.title = title;
 	}
 
-	public String getImageUrls() {
+	public List<String> getImageUrls() {
 		return imageUrls;
 	}
 
-	public void setImageUrls(String imageUrls) {
+	public void setImageUrls(List<String> imageUrls) {
 		this.imageUrls = imageUrls;
 	}
 
@@ -111,5 +113,4 @@ public class Reviews {
 				+ imageUrls + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt
 				+ "]";
 	}
-
 }
