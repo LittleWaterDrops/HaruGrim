@@ -25,13 +25,12 @@ public class Reviews {
 
 	private Date createdAt; // 생성 시각
 	private Date updatedAt; // 수정 시각
-	private Date deletedAt; // 삭제 시각
 
 	// 기본 생성자
 	public Reviews() {}
 
 	// 모든 필드를 받는 생성자
-	public Reviews(long id, long userId, String title, String content, List<String> imageUrls, Date createdAt, Date updatedAt, Date deletedAt) {
+	public Reviews(long id, long userId, String title, String content, List<String> imageUrls, Date createdAt, Date updatedAt) {
 		this.id = id;
 		this.userId = userId;
 		this.title = title;
@@ -39,10 +38,8 @@ public class Reviews {
 		this.imageUrls = imageUrls;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.deletedAt = deletedAt;
 	}
 
-	// Getter, Setter
 	public long getId() {
 		return id;
 	}
@@ -59,12 +56,28 @@ public class Reviews {
 		this.userId = userId;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getContent() {
 		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public List<String> getImageUrls() {
+		return imageUrls;
+	}
+
+	public void setImageUrls(List<String> imageUrls) {
+		this.imageUrls = imageUrls;
 	}
 
 	public Date getCreatedAt() {
@@ -83,34 +96,10 @@ public class Reviews {
 		this.updatedAt = updatedAt;
 	}
 
-	public Date getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(Date deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public List<String> getImageUrls() {
-		return imageUrls;
-	}
-
-	public void setImageUrls(List<String> imageUrls) {
-		this.imageUrls = imageUrls;
-	}
-
 	@Override
 	public String toString() {
 		return "Reviews [id=" + id + ", userId=" + userId + ", title=" + title + ", content=" + content + ", imageUrls="
-				+ imageUrls + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", deletedAt=" + deletedAt
-				+ "]";
+				+ imageUrls + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
+
 }

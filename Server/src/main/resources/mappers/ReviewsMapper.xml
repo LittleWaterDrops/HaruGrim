@@ -8,17 +8,17 @@
 	    VALUES (#{userId}, #{title}, #{content}, #{imageUrls, typeHandler=com.yh.util.JsonListTypeHandler})
 	</insert>
 
-    <select id="findById" resultType="com.yh.model.dto.Reviews">
-        SELECT * FROM reviews WHERE id = #{id}
+    <select id="findReviewListByUserId" resultType="com.yh.model.dto.Reviews">
+        SELECT * FROM reviews WHERE user_id = #{userId}
     </select>
 
-    <select id="findByUserId" resultType="com.yh.model.dto.Reviews">
-        SELECT * FROM reviews WHERE user_id = #{userId}
+    <select id="findReviewById" resultType="com.yh.model.dto.Reviews">
+        SELECT * FROM reviews WHERE id = #{id}
     </select>
 
     <update id="updateReview">
         UPDATE reviews
-        SET title = #{title}, content = #{content}, updated_at = NOW()
+        SET title = #{title}, content = #{content}, image_urls = #{imageUrls, typeHandler=com.yh.util.JsonListTypeHandler}, updated_at = NOW()
         WHERE id = #{id}
     </update>
 
