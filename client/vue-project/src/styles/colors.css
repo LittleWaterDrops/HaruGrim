@@ -1,0 +1,20 @@
+/* Primary Colors */
+:root {
+  --primary-300: #8de6f5;
+  --primary-400: #6ed0eb;
+  --primary-500: #41b2de;
+  --primary-600: #2f8cbe;
+  --primary-700: #206a9f;
+
+  /* Semantic Colors */
+  --success: #48c433;
+  --info: #1b7ff9;
+  --warning: #ffe121;
+  --danger: #ff513a;
+
+  /* Neutral Colors */
+  --letter-black: #484848;
+  --base: #9f9f9f;
+  --base-light: #fbfbfb;
+  --background: #ffffff;
+}
