@@ -14,7 +14,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getProfile(Long userId) {
-        return userDao.findUserById(userId);
+        User user = userDao.findUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+        return user;
     }
 
     @Override

@@ -1,29 +1,27 @@
 package com.yh.model.dto;
 
 public class Auth {
-    private Long userId;       // 사용자 ID
-    private String username;   // 사용자 이름
-    private String password;   // 비밀번호
-    private String email;      // 이메일 (회원가입 시 필요)
+    private Long id; // 사용자 ID
+    private String username; // 사용자 닉네임
+    private String password; // 비밀번호
+    private String email; // 이메일 (회원가입 시 필요)
 
-    // 기본 생성자
-    public Auth() {}
+    public Auth() {
+    }
 
-    // 모든 필드를 포함한 생성자
-    public Auth(Long userId, String username, String password, String email) {
-        this.userId = userId;
+    public Auth(Long id, String username, String password, String email) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-    // Getter and Setter
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

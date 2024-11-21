@@ -1,15 +1,16 @@
 package com.yh.model.service;
 
 import com.yh.model.dto.Auth;
-
-import jakarta.servlet.http.HttpSession;
+import com.yh.model.dto.TokenResponse;
 
 public interface AuthService {
-	void signup(Auth auth);
+    void signup(Auth auth); // 회원가입
 
-	Auth login(Auth auth, HttpSession session);
+    TokenResponse login(Auth auth); //로그인
 
-	void logout(HttpSession session);
+    TokenResponse refreshToken(String refreshToken); // access토큰 재발급(Refresh 토큰 있을시)
 
-	void deleteAccount(HttpSession session);
+    void logout(String refreshToken); // Refresh Token 기반 로그아웃
+    
+    void deleteAccount(String refreshToken); // 회원탈퇴 메서드
 }

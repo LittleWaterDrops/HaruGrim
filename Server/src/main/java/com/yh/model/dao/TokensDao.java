@@ -1,15 +1,21 @@
 package com.yh.model.dao;
 
+import java.util.Date;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.yh.model.dto.Tokens;
 
 public interface TokensDao {
-	Tokens findById(long id);
+	// 로그인시 토큰 생성을 위한 메소드
+	void insertToken(Long userId, String tokenType, String token, Date expiresAt);
 
-	List<Tokens> findByUserId(long userId);
+	void deleteTokensByUserId(Long userId); // 로그아웃시 토큰 삭제
 
-	int createToken(Tokens token);
+	void deleteTokenByValue(String token); 
+	
+	Tokens findTokenByValueAndType(@Param("token") String token, @Param("tokenType") String tokenType);
 
-	int deleteToken(long id);
+//	List<Tokens> findByUserId(@Param("userId") Long userId);
 }
