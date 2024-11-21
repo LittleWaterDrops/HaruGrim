@@ -15,4 +15,6 @@ public interface ReviewsDao {
 	int updateReview(Reviews review);
 
 	int deleteReview(long id);
+	
+	void updateImageUrls(long reviewId, String imageUrl);
 }

@@ -15,4 +15,6 @@ public interface ReviewsService {
 	Reviews updateReview(Reviews review);
 
 	void deleteReview(long id);
+	
+	String convertReviewToImage(long reviewId);
 }

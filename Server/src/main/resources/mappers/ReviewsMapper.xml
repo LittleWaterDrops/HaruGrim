@@ -3,10 +3,10 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yh.model.dao.ReviewsDao">
 
-	<insert id="createReview">
-	    INSERT INTO reviews (user_id, title, content, image_urls)
-	    VALUES (#{userId}, #{title}, #{content}, #{imageUrls, typeHandler=com.yh.util.JsonListTypeHandler})
-	</insert>
+    <insert id="createReview">
+        INSERT INTO reviews (user_id, title, content, image_urls)
+        VALUES (#{userId}, #{title}, #{content}, #{imageUrls, typeHandler=com.yh.util.JsonListTypeHandler})
+    </insert>
 
     <select id="findReviewListByUserId" resultType="com.yh.model.dto.Reviews">
         SELECT * FROM reviews WHERE user_id = #{userId}
@@ -20,6 +20,12 @@
         UPDATE reviews
         SET title = #{title}, content = #{content}, image_urls = #{imageUrls, typeHandler=com.yh.util.JsonListTypeHandler}, updated_at = NOW()
         WHERE id = #{id}
+    </update>
+
+    <update id="updateImageUrls">
+        UPDATE reviews
+        SET image_urls = #{imageUrl, typeHandler=com.yh.util.JsonListTypeHandler}, updated_at = NOW()
+        WHERE id = #{reviewId}
     </update>
 
     <delete id="deleteReview">
