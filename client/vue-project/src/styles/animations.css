@@ -1,12 +1,22 @@
-/* Fade In 애니메이션 */
 .fade-in {
   animation: fadeIn 1s ease-out forwards;
-  opacity: 0; /* 초기에는 숨김 처리 */
+  opacity: 0;
 }
 
-/* Bounce 애니메이션 */
 .bounce {
   animation: bounce 1.5s infinite;
+}
+
+.accordion-enter-active,
+.accordion-leave-active {
+  transition: all 0.3s ease;
+}
+
+.accordion-enter-from,
+.accordion-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
 }
 
 @keyframes fadeIn {

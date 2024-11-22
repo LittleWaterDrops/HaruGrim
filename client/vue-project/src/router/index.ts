@@ -1,5 +1,6 @@
+import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
-import SecondView from '@/views/SecondView.vue'
+import SignUpView from '@/views/SignUpView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -11,9 +12,14 @@ const router = createRouter({
       component: MainView,
     },
     {
-      path: '/second',
-      name: 'second view',
-      component: SecondView,
+      path: '/login',
+      name: 'login view',
+      component: LoginView,
+    },
+    {
+      path: '/signup',
+      name: 'signup view',
+      component: SignUpView,
     },
   ],
 })
