@@ -1,76 +1,86 @@
 <template>
   <div class="home-container">
-    <HomeHeader />
+    <transition name="fade">
+      <HomeHeader v-if="isHeaderVisible" />
+    </transition>
 
-    <div class="view-actions">
-      <button @click="toggleViewMode" class="toggle-view-button">
-        {{ viewMode === 'list' ? '갤러리로 보기' : '리스트로 보기' }}
-      </button>
-      <button @click="handleWriteButtonClick" class="write-review-button">
-        {{ isReviewFormOpen || isReviewViewOpen ? '닫기' : '회고 작성' }}
-      </button>
-    </div>
+    <transition name="fade">
+      <div class="view-actions" v-if="isViewActionsVisible">
+        <button @click="toggleViewMode" class="toggle-view-button">
+          {{ viewMode === 'list' ? '갤러리로 보기' : '리스트로 보기' }}
+        </button>
+        <button @click="handleWriteButtonClick" class="write-review-button">
+          {{ isReviewFormOpen || isReviewViewOpen ? '닫기' : '회고 작성' }}
+        </button>
+      </div>
+    </transition>
 
-    <div class="content">
-      <div class="content-main">
-        <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
-          <div v-if="viewMode === 'list'" class="list-view">
-            <div
-              v-for="item in items"
-              :key="item.id"
-              class="list-item"
-              @click="openReviewView(item)"
-            >
-              {{ item.title }}
+    <transition name="fade">
+      <div class="content" v-if="isContentVisible">
+        <div class="content-main">
+          <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
+            <div v-if="viewMode === 'list'" class="list-view">
+              <div
+                v-for="item in items"
+                :key="item.id"
+                class="list-item"
+                @click="openReviewView(item)"
+              >
+                {{ item.title }}
+              </div>
+            </div>
+            <div v-else class="gallery-view">
+              <div
+                v-for="item in items"
+                :key="item.id"
+                class="gallery-item"
+                @click="openReviewView(item)"
+                :style="{ backgroundImage: `url(${item.imageUrl})` }"
+              ></div>
             </div>
           </div>
-          <div v-else class="gallery-view">
-            <div
-              v-for="item in items"
-              :key="item.id"
-              class="gallery-item"
-              @click="openReviewView(item)"
-              :style="{ backgroundImage: `url(${item.imageUrl})` }"
-            ></div>
+
+          <div class="review-form" :class="{ visible: isReviewFormOpen }">
+            <h3>회고 작성</h3>
+            <form @submit.prevent="submitReview">
+              <div class="form-group">
+                <label for="review-title">제목</label>
+                <input type="text" id="review-title" v-model="reviewTitle" required />
+              </div>
+              <div class="form-group">
+                <label for="review-content">회고</label>
+                <textarea id="review-content" v-model="reviewContent" required></textarea>
+              </div>
+              <button type="submit" class="submit-button" :disabled="isSubmitting">
+                {{ isSubmitting ? '저장 중...' : '작성하기' }}
+              </button>
+            </form>
           </div>
-        </div>
 
-        <div class="review-form" :class="{ visible: isReviewFormOpen }">
-          <h3>회고 작성</h3>
-          <form @submit.prevent="submitReview">
-            <div class="form-group">
-              <label for="review-title">제목</label>
-              <input type="text" id="review-title" v-model="reviewTitle" required />
-            </div>
-            <div class="form-group">
-              <label for="review-content">회고</label>
-              <textarea id="review-content" v-model="reviewContent" required></textarea>
-            </div>
-            <button type="submit" class="submit-button" :disabled="isSubmitting">
-              {{ isSubmitting ? '저장 중...' : '작성하기' }}
-            </button>
-          </form>
-        </div>
-
-        <div class="review-view" :class="{ visible: isReviewViewOpen }">
-          <h3>{{ selectedItem?.title }}</h3>
-          <img :src="selectedItem?.imageUrl" alt="이미지" class="review-image" />
-          <p>{{ selectedItem?.content }}</p>
+          <div class="review-view" :class="{ visible: isReviewViewOpen }">
+            <h3>{{ selectedItem?.title }}</h3>
+            <img :src="selectedItem?.imageUrl" alt="이미지" class="review-image" />
+            <p>{{ selectedItem?.content }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import HomeHeader from '@/components/Header/HomeHeader.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const viewMode = ref('list')
 const isReviewFormOpen = ref(false)
 const isReviewViewOpen = ref(false)
 const isSubmitting = ref(false)
 const selectedItem = ref(null)
+const isHeaderVisible = ref(false)
+const isViewActionsVisible = ref(false)
+const isContentVisible = ref(false)
+
 const items = ref(
   Array.from({ length: 20 }, (_, i) => ({
     id: i + 1,
@@ -79,6 +89,7 @@ const items = ref(
     imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
   })),
 )
+
 const reviewTitle = ref('')
 const reviewContent = ref('')
 
@@ -120,7 +131,7 @@ const mockApiCall = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`https://via.placeholder.com/100?text=New+Item`)
-    }, 1000) // 1초 대기
+    }, 1000)
   })
 }
 
@@ -146,6 +157,18 @@ const submitReview = async () => {
     }
   }
 }
+
+onMounted(() => {
+  setTimeout(() => {
+    isHeaderVisible.value = true
+    setTimeout(() => {
+      isViewActionsVisible.value = true
+      setTimeout(() => {
+        isContentVisible.value = true
+      }, 300)
+    }, 300)
+  }, 200)
+})
 </script>
 
 <style scoped>

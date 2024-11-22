@@ -21,9 +21,11 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 const isDropdownOpen = ref(false)
+const router = useRouter()
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
@@ -32,11 +34,13 @@ const toggleDropdown = () => {
 const logout = () => {
   alert('로그아웃되었습니다.')
   isDropdownOpen.value = false
+  router.push('/')
 }
 
 const viewProfile = () => {
   alert('회원 정보 조회 페이지로 이동합니다.')
   isDropdownOpen.value = false
+  router.push('/profile')
 }
 </script>
 
@@ -75,8 +79,8 @@ const viewProfile = () => {
 }
 
 .profile-button img {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 }
 
