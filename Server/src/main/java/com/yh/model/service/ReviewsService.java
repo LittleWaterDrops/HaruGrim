@@ -5,16 +5,14 @@ import java.util.List;
 import com.yh.model.dto.Reviews;
 
 public interface ReviewsService {
-	
-	Reviews createReview(Reviews review);
+    Reviews createReview(Reviews review);
 
-	List<Reviews> getReviewListByUserId(long userId);
+    List<Reviews> getReviewListByUserId(long userId);
 
-	Reviews getReviewById(long id);
+    Reviews getReviewById(long id);
 
-	Reviews updateReview(Reviews review);
+    Reviews updateReview(Reviews review);
 
-	void deleteReview(long id);
-	
-	String convertReviewToImage(long reviewId);
+    void deleteReview(long id);
 }
+

@@ -1,20 +1,17 @@
 package com.yh.model.dao;
 
 import java.util.List;
-
 import com.yh.model.dto.Reviews;
 
 public interface ReviewsDao {
-	
-	int createReview(Reviews review);
+    int createReview(Reviews review);
 
-	List<Reviews> findReviewListByUserId(long userId);
+    List<Reviews> findReviewListByUserId(long userId);
 
-	Reviews findReviewById(long id);
-	
-	int updateReview(Reviews review);
+    Reviews findReviewById(long id);
 
-	int deleteReview(long id);
-	
-	void updateImageUrls(long reviewId, String imageUrl);
+    int updateReview(Reviews review);
+
+    int deleteReview(long id);
 }
+
