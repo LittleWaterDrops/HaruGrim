@@ -108,7 +108,7 @@ const handleLogin = async () => {
 
 .login-main {
   background-color: var(--background);
-  padding: 20px;
+  padding: 50px 50px 15px 50px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -144,12 +144,13 @@ const handleLogin = async () => {
   position: relative;
   display: inline-block;
   width: 100%;
+  margin-top: 15px;
+  margin-bottom: 5px;
   padding: 10px;
   background-color: var(--primary-500);
   color: var(--background);
   border: 1px solid var(--primary-500);
   border-radius: 4px;
-  margin-top: 5px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -185,7 +186,8 @@ const handleLogin = async () => {
 }
 
 .signup-text {
-  margin-top: 20px;
+  margin-top: 5px;
+  margin-bottom: 15px;
   text-align: center;
   font-size: 0.8rem;
 }

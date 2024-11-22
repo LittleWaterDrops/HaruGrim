@@ -1,8 +1,6 @@
 <template>
   <div class="home-container">
-    <transition name="fade">
-      <HomeHeader v-if="isHeaderVisible" />
-    </transition>
+    <HomeHeader />
 
     <transition name="fade">
       <div class="view-actions" v-if="isViewActionsVisible">
@@ -30,13 +28,13 @@
               </div>
             </div>
             <div v-else class="gallery-view">
-              <div
+              <GalleryItem
                 v-for="item in items"
                 :key="item.id"
-                class="gallery-item"
                 @click="openReviewView(item)"
-                :style="{ backgroundImage: `url(${item.imageUrl})` }"
-              ></div>
+                :imageUrl="item.imageUrl"
+                :content="item.content"
+              />
             </div>
           </div>
 
@@ -70,6 +68,7 @@
 
 <script setup lang="ts">
 import HomeHeader from '@/components/Header/HomeHeader.vue'
+import GalleryItem from '@/components/HomeView/GalleryItem.vue'
 import { ref, onMounted } from 'vue'
 
 const viewMode = ref('list')
@@ -77,7 +76,6 @@ const isReviewFormOpen = ref(false)
 const isReviewViewOpen = ref(false)
 const isSubmitting = ref(false)
 const selectedItem = ref(null)
-const isHeaderVisible = ref(false)
 const isViewActionsVisible = ref(false)
 const isContentVisible = ref(false)
 
@@ -160,12 +158,9 @@ const submitReview = async () => {
 
 onMounted(() => {
   setTimeout(() => {
-    isHeaderVisible.value = true
+    isViewActionsVisible.value = true
     setTimeout(() => {
-      isViewActionsVisible.value = true
-      setTimeout(() => {
-        isContentVisible.value = true
-      }, 300)
+      isContentVisible.value = true
     }, 300)
   }, 200)
 })
@@ -245,16 +240,6 @@ onMounted(() => {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-}
-
-.gallery-item {
-  width: 100px;
-  height: 100px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 .review-form,

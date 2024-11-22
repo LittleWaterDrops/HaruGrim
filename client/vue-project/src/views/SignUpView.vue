@@ -198,12 +198,12 @@ const handleSignUp = async () => {
 
 .signup-main {
   background: var(--background);
-  padding: 30px 20px 15px 20px;
+  padding: 50px 50px 15px 50px;
   line-height: 1.7;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 550px;
 }
 
 .signup-main p {
@@ -284,6 +284,8 @@ const handleSignUp = async () => {
   position: relative;
   display: inline-block;
   width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
   padding: 10px;
   background-color: var(--primary-500);
   color: var(--background);
