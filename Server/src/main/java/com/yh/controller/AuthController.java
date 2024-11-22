@@ -2,6 +2,7 @@ package com.yh.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:5173") // 클라이언트 URL 허용
 public class AuthController {
 	private final AuthService authService;
 
