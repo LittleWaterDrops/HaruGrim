@@ -18,9 +18,12 @@
 
     <div class="view-content">
       <div v-if="isGalleryView" class="gallery-view">
-        <div v-for="(item, index) in items" :key="'gallery-' + index" class="gallery-item">
-          <p>이미지 {{ index + 1 }}</p>
-        </div>
+        <GalleryItem
+          v-for="(item, index) in items"
+          :key="'gallery-' + index"
+          :imageUrl="`https://via.placeholder.com/150x225?text=Image+${index + 1}`"
+          :content="`이미지 설명 ${index + 1}`"
+        />
       </div>
 
       <div v-else class="list-view">
@@ -36,6 +39,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import GalleryItem from '../HomeView/GalleryItem.vue'
 
 const items = ['제목 1', '제목 2', '제목 3', '제목 4', '제목 5']
 
@@ -146,18 +150,8 @@ onUnmounted(() => {
 
 .gallery-view {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 20px;
-}
-
-.gallery-item {
-  background-color: var(--base-light);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 150px;
-  border: 1px solid var(--base);
-  border-radius: 10px;
 }
 
 .list-view ul {

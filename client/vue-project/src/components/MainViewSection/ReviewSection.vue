@@ -11,17 +11,21 @@
 
       <div class="marquee">
         <div class="marquee-track">
-          <div
+          <GalleryItem
             v-for="(image, index) in images"
             :key="index"
-            class="image-box"
-            :style="{ backgroundImage: `url(${image})` }"
+            :imageUrl="image"
+            content=""
+            :canHover="false"
+            :style="{ flex: '0 0 auto', width: '300px', height: '450px' }"
           />
-          <div
+          <GalleryItem
             v-for="(image, index) in images"
-            :key="index"
-            class="image-box"
-            :style="{ backgroundImage: `url(${image})` }"
+            :key="'duplicate-' + index"
+            :imageUrl="image"
+            content=""
+            :canHover="false"
+            :style="{ flex: '0 0 auto', width: '300px', height: '450px' }"
           />
         </div>
       </div>
@@ -36,12 +40,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import GalleryItem from '../HomeView/GalleryItem.vue'
 
 const images = [
-  'https://via.placeholder.com/150?text=Image+1',
-  'https://via.placeholder.com/150?text=Image+2',
-  'https://via.placeholder.com/150?text=Image+3',
-  'https://via.placeholder.com/150?text=Image+4',
+  'https://via.placeholder.com/300x400?text=Image+1',
+  'https://via.placeholder.com/300x400?text=Image+2',
+  'https://via.placeholder.com/300x400?text=Image+3',
+  'https://via.placeholder.com/300x400?text=Image+4',
 ]
 
 const isVisible = ref(false)
@@ -128,12 +133,13 @@ onUnmounted(() => {
   animation: marquee 10s linear infinite;
 }
 
-.image-box {
-  flex: 0 0 200px;
-  height: 400px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 20px;
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .description {
