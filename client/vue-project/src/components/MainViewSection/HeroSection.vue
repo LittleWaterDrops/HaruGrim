@@ -4,13 +4,19 @@
       <h1 class="hero-title fade-in">하루를 돌아보고,<br />나만의 이야기를 그려보세요.</h1>
 
       <div class="button-group fade-in">
-        <button class="login-btn fade-in">로그인</button>
-        <button class="signup-btn fade-in">회원가입</button>
+        <router-link to="/login">
+          <button class="login-btn fade-in">로그인</button>
+        </router-link>
+        <router-link to="/signUp">
+          <button class="signup-btn fade-in">회원가입</button>
+        </router-link>
       </div>
 
       <div class="explore fade-in">
         <p>
-          <button class="explore-btn">둘러볼게요!</button>
+          <router-link to="/home">
+            <button class="explore-btn">둘러볼게요!</button>
+          </router-link>
         </p>
         <small>둘러보신다면, 글쓰기 등의 기능이 제한될 수 있어요.</small>
       </div>
