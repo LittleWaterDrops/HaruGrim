@@ -1,0 +1,147 @@
+<template>
+  <section class="review-section" :class="{ visible: isVisible }" ref="reviewSection">
+    <div class="review-content">
+      <div>
+        <h1 class="category">AI</h1>
+        <h2 class="title">
+          회고를 이미지로,<br />
+          생각을 시각화하는 새로운 방식.
+        </h2>
+      </div>
+
+      <div class="marquee">
+        <div class="marquee-track">
+          <div
+            v-for="(image, index) in images"
+            :key="index"
+            class="image-box"
+            :style="{ backgroundImage: `url(${image})` }"
+          />
+          <div
+            v-for="(image, index) in images"
+            :key="index"
+            class="image-box"
+            :style="{ backgroundImage: `url(${image})` }"
+          />
+        </div>
+      </div>
+
+      <p class="description">
+        작성하신 회고를 바탕으로 <br />
+        DALL-E를 사용하여 이미지를 만들어드려요.
+      </p>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const images = [
+  'https://via.placeholder.com/150?text=Image+1',
+  'https://via.placeholder.com/150?text=Image+2',
+  'https://via.placeholder.com/150?text=Image+3',
+  'https://via.placeholder.com/150?text=Image+4',
+]
+
+const isVisible = ref(false)
+const reviewSection = ref<HTMLElement | null>(null)
+
+const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+  const [entry] = entries
+  if (entry.isIntersecting) {
+    isVisible.value = true
+  }
+}
+
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  observer = new IntersectionObserver(handleIntersection, {
+    threshold: 0.1,
+  })
+  if (reviewSection.value) {
+    observer.observe(reviewSection.value)
+  }
+})
+
+onUnmounted(() => {
+  if (observer && reviewSection.value) {
+    observer.unobserve(reviewSection.value)
+  }
+})
+</script>
+
+<style scoped>
+.review-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0px;
+  background-color: var(--background);
+  color: var(--letter-black);
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.review-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.review-content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.category {
+  padding: 0 10%;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--primary-500);
+  margin-bottom: 10px;
+}
+
+.title {
+  padding: 0 10%;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--letter-black);
+}
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 50px;
+  animation: marquee 10s linear infinite;
+}
+
+.image-box {
+  flex: 0 0 200px;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+}
+
+.description {
+  padding: 0 10%;
+  text-align: end;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--letter-black);
+}
+</style>
