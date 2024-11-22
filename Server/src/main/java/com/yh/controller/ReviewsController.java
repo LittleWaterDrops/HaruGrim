@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/reviews")
+@CrossOrigin(origins = "http://localhost:5173") // 클라이언트 URL 허용
 public class ReviewsController {
 
 	private final ReviewsService reviewsService;

@@ -39,6 +39,7 @@ public class OpenAIUtil {
 	    String prompt = baseStyle + dynamicDetails;
 
 	    // OpenAI API 호출
+	    
 	    return generateImage(prompt);
 	}
 
@@ -52,7 +53,8 @@ public class OpenAIUtil {
 		
 		System.out.println("prompt :" + prompt);
 		
-		Map<String, Object> requestBody = Map.of("prompt", prompt, "n", 1, // 한 번에 생성할 이미지 수
+		Map<String, Object> requestBody = Map.of("prompt", prompt,
+				"n", 1, // 한 번에 생성할 이미지 수
 				"size", "512x512" // 이미지 크기
 		);
 

@@ -94,6 +94,7 @@
 import SignUpHeader from '@/components/Header/SignUpHeader.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios';
 
 const email = ref('')
 const password = ref('')
@@ -128,18 +129,33 @@ const validateUsername = () => {
   step.value = 4
 }
 
-const handleSignUp = () => {
-  if (email.value && password.value && username.value) {
-    console.log('회원가입 성공:', {
+// const handleSignUp = () => {
+//   if (email.value && password.value && username.value) {
+//     console.log('회원가입 성공:', {
+//       email: email.value,
+//       password: password.value,
+//       username: username.value,
+//     })
+//     router.push('/welcome')
+//   } else {
+//     alert('모든 필드를 올바르게 입력해주세요.')
+//   }
+// }
+
+const handleSignUp = async () => {
+  try {
+    await axios.post('http://localhost:8080/auth/signup', {
       email: email.value,
       password: password.value,
-      username: username.value,
-    })
-    router.push('/welcome')
-  } else {
-    alert('모든 필드를 올바르게 입력해주세요.')
+      username: username.value
+    });
+
+    alert('회원가입 성공! 로그인 페이지로 이동합니다.');
+    router.push('/login');
+  } catch (error: any) {
+    alert('회원가입 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
   }
-}
+};
 </script>
 
 <style scoped>

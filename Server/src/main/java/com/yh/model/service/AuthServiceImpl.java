@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public TokenResponse login(Auth auth) {
-	    Auth foundAuth = authDao.findUserByUsername(auth.getUsername());
+	    Auth foundAuth = authDao.findUserByUserEmail(auth.getEmail());
 	    if (foundAuth == null || !foundAuth.getPassword().equals(auth.getPassword())) {
 	        throw new IllegalArgumentException("로그인 실패");
 	    }
