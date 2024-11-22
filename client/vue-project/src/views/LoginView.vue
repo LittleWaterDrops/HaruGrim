@@ -7,7 +7,7 @@
     </header>
 
     <div class="title">
-      <h1>하루 그림에 로그인 해주세요.</h1>
+      <h1>하루 그림에 로그인하기</h1>
     </div>
 
     <main class="login-main">
@@ -32,7 +32,9 @@
             required
           />
         </div>
-        <button type="submit" class="login-button">로그인</button>
+        <button type="submit" class="login-button">
+          <span>로그인</span>
+        </button>
       </form>
       <p class="signup-text">
         새로 오셨나요? <router-link to="/signup">계정 생성하기</router-link>
@@ -47,7 +49,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios';
+import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
@@ -67,16 +69,16 @@ const handleLogin = async () => {
     const response = await axios.post('http://localhost:8080/auth/login', {
       email: email.value,
       password: password.value,
-    });
+    })
 
-    const { accessToken } = response.data;
-    localStorage.setItem('accessToken', accessToken); // 저장
-    alert('로그인 성공!');
-    router.push('/main');
+    const { accessToken } = response.data
+    localStorage.setItem('accessToken', accessToken) // 저장
+    alert('로그인 성공!')
+    router.push('/home')
   } catch (error: any) {
-    alert('로그인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
+    alert('로그인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'))
   }
-};
+}
 </script>
 
 <style scoped>
@@ -87,7 +89,7 @@ const handleLogin = async () => {
   padding-top: 30px;
   min-height: 100vh;
   background-color: var(--base-light);
-  color: #333;
+  color: var(--letter-black);
 }
 
 .login-header .logo {
@@ -127,35 +129,65 @@ const handleLogin = async () => {
   display: block;
   margin-bottom: 5px;
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .form-group input {
   width: 100%;
   padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+  font-size: 0.7rem;
+  border: 1px solid var(--base);
   border-radius: 4px;
 }
 
 .login-button {
+  position: relative;
+  display: inline-block;
   width: 100%;
   padding: 10px;
   background-color: var(--primary-500);
   color: var(--background);
-  border: none;
+  border: 1px solid var(--primary-500);
   border-radius: 4px;
+  margin-top: 5px;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.login-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.login-button:hover::before {
+  left: 0;
 }
 
 .login-button:hover {
-  background-color: var(--primary-600);
+  color: var(--primary-500);
 }
 
 .signup-text {
   margin-top: 20px;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .signup-text a {

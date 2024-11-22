@@ -20,7 +20,9 @@
         <label for="password">비밀번호</label>
         <input type="password" id="password" v-model="profile.password" readonly />
       </div>
-      <button class="delete-account-button" @click="deleteAccount">회원 탈퇴</button>
+      <button class="delete-account-button" @click="deleteAccount">
+        <span>회원 탈퇴</span>
+      </button>
     </main>
   </div>
 </template>
@@ -122,19 +124,44 @@ const deleteAccount = () => {
 }
 
 .delete-account-button {
+  position: relative;
+  display: inline-block;
   width: 100%;
   padding: 10px;
-  background-color: var(--base-light);
-  color: var(--base);
+  background-color: var(--background);
+  color: var(--danger);
   font-size: 1rem;
-  border: none;
+  border: 1px solid var(--danger);
   border-radius: 4px;
   cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.delete-account-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.delete-account-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--danger);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.delete-account-button:hover::before {
+  left: 0;
 }
 
 .delete-account-button:hover {
-  background-color: var(--danger);
   color: var(--background);
-  font-weight: 500;
 }
 </style>
