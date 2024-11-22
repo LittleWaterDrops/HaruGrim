@@ -5,10 +5,14 @@
 
       <div class="button-group fade-in">
         <router-link to="/login">
-          <button class="login-btn fade-in">로그인</button>
+          <button class="login-btn fade-in">
+            <span>로그인</span>
+          </button>
         </router-link>
         <router-link to="/signUp">
-          <button class="signup-btn fade-in">회원가입</button>
+          <button class="signup-btn fade-in">
+            <span>회원가입</span>
+          </button>
         </router-link>
       </div>
 
@@ -68,8 +72,10 @@
   gap: 50px;
   animation-delay: 0.9s;
 }
+
 .login-btn,
 .signup-btn {
+  position: relative;
   display: inline-block;
   padding: 10px 30px;
   font-size: 1rem;
@@ -78,24 +84,45 @@
   text-transform: uppercase;
   background-color: transparent;
   color: var(--letter-black);
-  border: 2px solid var(--letter-black);
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  overflow: hidden;
+  border: 2px solid transparent;
+  outline: 2px solid var(--letter-black);
+  transition:
+    color 0.3s ease,
+    border-radius 0.3s ease,
+    transform 0.3s ease;
 }
 
-.login-btn:hover {
-  color: var(--primary-500);
-  border: 2px solid var(--primary-500);
-  border-radius: 50px;
-  transform: scale(1.05);
-}
-
+.login-btn:hover,
 .signup-btn:hover {
-  color: var(--primary-600);
-  border: 2px solid var(--primary-600);
-  border-radius: 50px;
-  transform: scale(1.05);
+  color: var(--background);
+  outline-color: var(--letter-black);
+}
+
+.login-btn span,
+.signup-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.login-btn::before,
+.signup-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--letter-black);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.login-btn:hover::before,
+.signup-btn:hover::before {
+  left: 0;
 }
 
 .explore {

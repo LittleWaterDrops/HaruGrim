@@ -4,8 +4,8 @@
 
     <main class="signup-main">
       <p>
-        하루 그림에 오신 것을 환영합니다! <br />
-        오늘 하루를 그림으로 그려볼까요?
+        <span>{{ firstLineDisplayed }}</span> <br />
+        <span>{{ secondLineDisplayed }}</span>
       </p>
       <form @submit.prevent="handleSignUp">
         <transition name="accordion">
@@ -26,7 +26,7 @@
                 class="continue-button"
                 v-if="step === 1"
               >
-                계속
+                <span>계속</span>
               </button>
             </div>
           </div>
@@ -50,7 +50,7 @@
                 class="continue-button"
                 v-if="step === 2"
               >
-                계속
+                <span>계속</span>
               </button>
             </div>
           </div>
@@ -73,14 +73,16 @@
                 class="continue-button"
                 v-if="step === 3"
               >
-                계속
+                <span>계속</span>
               </button>
             </div>
           </div>
         </transition>
 
         <transition name="accordion">
-          <button type="submit" class="login-button" v-if="step === 4">회원가입</button>
+          <button type="submit" class="login-button" v-if="step === 4">
+            <span>가입하기</span>
+          </button>
         </transition>
       </form>
     </main>
@@ -92,7 +94,7 @@
 
 <script setup lang="ts">
 import SignUpHeader from '@/components/Header/SignUpHeader.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const email = ref('')
@@ -101,12 +103,39 @@ const username = ref('')
 const step = ref(1)
 const router = useRouter()
 
+const firstLine = '하루 그림에 오신 것을 환영합니다!'
+const secondLine = '오늘 하루를 그림으로 그려볼까요?'
+
+const firstLineDisplayed = ref('')
+const secondLineDisplayed = ref('')
+const typingInterval = 50
+
+const typeText = () => {
+  let firstLineIndex = 0
+  let secondLineIndex = 0
+
+  const interval = setInterval(() => {
+    if (firstLineIndex < firstLine.length) {
+      firstLineDisplayed.value += firstLine[firstLineIndex]
+      firstLineIndex++
+    } else if (secondLineIndex < secondLine.length) {
+      secondLineDisplayed.value += secondLine[secondLineIndex]
+      secondLineIndex++
+    } else {
+      clearInterval(interval)
+    }
+  }, typingInterval)
+}
+
+onMounted(() => {
+  typeText()
+})
+
 const validateEmail = () => {
   if (!email.value.includes('@')) {
     alert('유효한 이메일 주소를 입력해주세요.')
     return
   }
-  console.log('이메일 유효성 확인:', email.value)
   step.value = 2
 }
 
@@ -115,7 +144,6 @@ const validatePassword = () => {
     alert('비밀번호는 최소 6자리 이상이어야 합니다.')
     return
   }
-  console.log('비밀번호 유효성 확인:', password.value)
   step.value = 3
 }
 
@@ -124,18 +152,13 @@ const validateUsername = () => {
     alert('유저명을 입력해주세요.')
     return
   }
-  console.log('유저명 유효성 확인:', username.value)
   step.value = 4
 }
 
 const handleSignUp = () => {
   if (email.value && password.value && username.value) {
-    console.log('회원가입 성공:', {
-      email: email.value,
-      password: password.value,
-      username: username.value,
-    })
-    router.push('/welcome')
+    alert('가입이 완료되었습니다!\n로그인 해주세요.')
+    router.push('/login')
   } else {
     alert('모든 필드를 올바르게 입력해주세요.')
   }
@@ -155,7 +178,7 @@ const handleSignUp = () => {
 
 .signup-main {
   background: var(--background);
-  padding: 30px 20px 5px 20px;
+  padding: 30px 20px 15px 20px;
   line-height: 1.7;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -167,6 +190,7 @@ const handleSignUp = () => {
   font-size: 0.9rem;
   margin-bottom: 20px;
   font-weight: 500;
+  min-height: 60px;
 }
 
 .form-group {
@@ -190,12 +214,14 @@ const handleSignUp = () => {
 .input-group input {
   flex: 1;
   padding: 10px;
-  font-size: 1rem;
+  font-size: 0.7rem;
   border: 1px solid var(--base);
   border-radius: 4px;
 }
 
 .continue-button {
+  position: relative;
+  display: inline-block;
   padding: 10px 15px;
   background-color: var(--background);
   color: var(--success);
@@ -203,26 +229,77 @@ const handleSignUp = () => {
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.continue-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.continue-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--success);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.continue-button:hover::before {
+  left: 0;
 }
 
 .continue-button:hover {
-  background-color: var(--success);
   color: var(--background);
 }
 
 .login-button {
+  position: relative;
+  display: inline-block;
   width: 100%;
   padding: 10px;
   background-color: var(--primary-500);
   color: var(--background);
-  border: none;
+  border: 1px solid var(--primary-500);
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.login-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.login-button:hover::before {
+  left: 0;
 }
 
 .login-button:hover {
-  background-color: var(--primary-600);
+  color: var(--primary-500);
 }
 
 .signup-footer {
