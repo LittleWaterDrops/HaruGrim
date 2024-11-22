@@ -1,3 +1,4 @@
+import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import MainView from '@/views/MainView.vue'
 import SignUpView from '@/views/SignUpView.vue'
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup view',
       component: SignUpView,
+    },
+    {
+      path: '/home',
+      name: 'home view',
+      component: HomeView,
     },
   ],
 })
