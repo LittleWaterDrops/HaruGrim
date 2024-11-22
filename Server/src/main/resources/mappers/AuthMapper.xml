@@ -9,9 +9,9 @@
         VALUES (#{username}, #{password}, #{email}, NOW())
     </insert>
 
-    <select id="findUserByUsername" resultType="com.yh.model.dto.Auth">
+    <select id="findUserByUserEmail" resultType="com.yh.model.dto.Auth">
         SELECT id, username, password, email
         FROM users
-        WHERE username = #{username}
+        WHERE email = #{email}
     </select>
 </mapper>

@@ -49,16 +49,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 
-const handleLogin = () => {
-  if (email.value && password.value) {
+// const handleLogin = () => {
+//   if (email.value && password.value) {
+//     console.log('로그인 성공:', email.value)
+//     router.push('/home')
+//   } else {
+//     alert('이메일과 비밀번호를 입력해주세요.')
+//   }
+// }
+
+const handleLogin = async () => {
+  try {
+    const response = await axios.post('http://localhost:8080/auth/login', {
+      email: email.value,
+      password: password.value,
+    })
+
+    const { accessToken } = response.data
+    localStorage.setItem('accessToken', accessToken) // 저장
+    alert('로그인 성공!')
     router.push('/home')
-  } else {
-    alert('이메일과 비밀번호를 입력해주세요.')
+  } catch (error: any) {
+    alert('로그인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'))
   }
 }
 </script>
