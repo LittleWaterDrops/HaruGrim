@@ -1,8 +1,6 @@
 <template>
   <div class="home-container">
-    <transition name="fade">
-      <HomeHeader v-if="isHeaderVisible" />
-    </transition>
+    <HomeHeader />
 
     <transition name="fade">
       <div class="view-actions" v-if="isViewActionsVisible">
@@ -77,7 +75,6 @@ const isReviewFormOpen = ref(false)
 const isReviewViewOpen = ref(false)
 const isSubmitting = ref(false)
 const selectedItem = ref(null)
-const isHeaderVisible = ref(false)
 const isViewActionsVisible = ref(false)
 const isContentVisible = ref(false)
 
@@ -160,12 +157,9 @@ const submitReview = async () => {
 
 onMounted(() => {
   setTimeout(() => {
-    isHeaderVisible.value = true
+    isViewActionsVisible.value = true
     setTimeout(() => {
-      isViewActionsVisible.value = true
-      setTimeout(() => {
-        isContentVisible.value = true
-      }, 300)
+      isContentVisible.value = true
     }, 300)
   }, 200)
 })
