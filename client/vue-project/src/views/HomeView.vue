@@ -46,7 +46,9 @@
               <label for="review-content">회고</label>
               <textarea id="review-content" v-model="reviewContent" required></textarea>
             </div>
-            <button type="submit" class="submit-button">작성하기</button>
+            <button type="submit" class="submit-button" :disabled="isSubmitting">
+              {{ isSubmitting ? '저장 중...' : '작성하기' }}
+            </button>
           </form>
         </div>
 
@@ -67,6 +69,7 @@ import { ref } from 'vue'
 const viewMode = ref('list')
 const isReviewFormOpen = ref(false)
 const isReviewViewOpen = ref(false)
+const isSubmitting = ref(false)
 const selectedItem = ref(null)
 const items = ref(
   Array.from({ length: 20 }, (_, i) => ({
@@ -113,11 +116,34 @@ const openReviewView = (item) => {
   }
 }
 
-const submitReview = () => {
+const mockApiCall = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`https://via.placeholder.com/100?text=New+Item`)
+    }, 1000) // 1초 대기
+  })
+}
+
+const submitReview = async () => {
   if (reviewTitle.value && reviewContent.value) {
-    alert('회고가 작성되었습니다.')
-    isReviewFormOpen.value = false
-    resetReviewForm()
+    isSubmitting.value = true
+    try {
+      const imageUrl = await mockApiCall()
+      const newItem = {
+        id: items.value.length + 1,
+        title: reviewTitle.value,
+        content: reviewContent.value,
+        imageUrl,
+      }
+      items.value.push(newItem)
+      alert('회고가 작성되었습니다.')
+    } catch (error) {
+      alert('회고 작성 중 문제가 발생했습니다.')
+    } finally {
+      isSubmitting.value = false
+      isReviewFormOpen.value = false
+      resetReviewForm()
+    }
   }
 }
 </script>
@@ -223,13 +249,6 @@ const submitReview = () => {
     width 0.3s ease-in-out,
     opacity 0.3s ease-in-out,
     padding 0.3s ease-in-out;
-}
-
-.review-view:not(.visible) .review-image {
-  opacity: 0;
-  pointer-events: none;
-  width: 0;
-  height: 0;
 }
 
 .review-form.visible,
