@@ -6,21 +6,32 @@
       <button @click="toggleViewMode" class="toggle-view-button">
         {{ viewMode === 'list' ? '갤러리로 보기' : '리스트로 보기' }}
       </button>
-      <button @click="toggleReviewForm" class="write-review-button">
-        {{ isReviewFormOpen ? '닫기' : '회고 작성' }}
+      <button @click="handleWriteButtonClick" class="write-review-button">
+        {{ isReviewFormOpen || isReviewViewOpen ? '닫기' : '회고 작성' }}
       </button>
     </div>
 
     <div class="content">
       <div class="content-main">
-        <div class="scrollable-content" :class="{ shrink: isReviewFormOpen }">
+        <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
           <div v-if="viewMode === 'list'" class="list-view">
-            <div v-for="item in items" :key="item.id" class="list-item">
+            <div
+              v-for="item in items"
+              :key="item.id"
+              class="list-item"
+              @click="openReviewView(item)"
+            >
               {{ item.title }}
             </div>
           </div>
           <div v-else class="gallery-view">
-            <div v-for="item in items" :key="item.id" class="gallery-item"></div>
+            <div
+              v-for="item in items"
+              :key="item.id"
+              class="gallery-item"
+              @click="openReviewView(item)"
+              :style="{ backgroundImage: `url(${item.imageUrl})` }"
+            ></div>
           </div>
         </div>
 
@@ -38,6 +49,12 @@
             <button type="submit" class="submit-button">작성하기</button>
           </form>
         </div>
+
+        <div class="review-view" :class="{ visible: isReviewViewOpen }">
+          <h3>{{ selectedItem?.title }}</h3>
+          <img :src="selectedItem?.imageUrl" alt="이미지" class="review-image" />
+          <p>{{ selectedItem?.content }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -49,24 +66,58 @@ import { ref } from 'vue'
 
 const viewMode = ref('list')
 const isReviewFormOpen = ref(false)
-const items = ref(Array.from({ length: 20 }, (_, i) => ({ id: i + 1, title: `제목 ${i + 1}` })))
+const isReviewViewOpen = ref(false)
+const selectedItem = ref(null)
+const items = ref(
+  Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    title: `제목 ${i + 1}`,
+    content: `이것은 제목 ${i + 1}의 회고 내용입니다.`,
+    imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
+  })),
+)
 const reviewTitle = ref('')
 const reviewContent = ref('')
+
+const resetReviewForm = () => {
+  reviewTitle.value = ''
+  reviewContent.value = ''
+}
 
 const toggleViewMode = () => {
   viewMode.value = viewMode.value === 'list' ? 'gallery' : 'list'
 }
 
-const toggleReviewForm = () => {
-  isReviewFormOpen.value = !isReviewFormOpen.value
+const handleWriteButtonClick = () => {
+  if (isReviewFormOpen.value || isReviewViewOpen.value) {
+    isReviewFormOpen.value = false
+    isReviewViewOpen.value = false
+    selectedItem.value = null
+    resetReviewForm()
+  } else {
+    isReviewFormOpen.value = true
+  }
+}
+
+const openReviewView = (item) => {
+  if (isReviewFormOpen.value) {
+    isReviewFormOpen.value = false
+    resetReviewForm()
+    setTimeout(() => {
+      selectedItem.value = item
+      isReviewViewOpen.value = true
+    }, 300)
+  } else {
+    selectedItem.value = item
+    isReviewViewOpen.value = true
+  }
 }
 
 const submitReview = () => {
   if (reviewTitle.value && reviewContent.value) {
     alert('회고가 작성되었습니다.')
     isReviewFormOpen.value = false
-    reviewTitle.value = ''
-    reviewContent.value = ''
+    resetReviewForm()
   }
 }
 </script>
@@ -137,6 +188,7 @@ const submitReview = () => {
   background: var(--base-light);
   border: 1px solid var(--base);
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .gallery-view {
@@ -149,12 +201,15 @@ const submitReview = () => {
 .gallery-item {
   width: 100px;
   height: 100px;
-  background: var(--base-light);
-  border: 1px solid var(--base);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-.review-form {
+.review-form,
+.review-view {
   flex: 0;
   width: 0;
   padding: 0;
@@ -170,13 +225,30 @@ const submitReview = () => {
     padding 0.3s ease-in-out;
 }
 
-.review-form.visible {
+.review-view:not(.visible) .review-image {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.review-form.visible,
+.review-view.visible {
   flex: 0.5;
   width: auto;
   padding: 20px;
   opacity: 1;
   pointer-events: auto;
 }
+
+.review-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  transition: opacity 0.3s ease-in-out;
+}
+
 .review-form h3 {
   margin-bottom: 10px;
 }
