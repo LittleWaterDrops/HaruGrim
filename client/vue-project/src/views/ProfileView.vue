@@ -3,7 +3,8 @@
     <header class="profile-header">
       <button class="back-button" @click="goBack">←</button>
       <div class="logo">
-        <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" />
+        <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
+        <img src="`/images/logo3.png`" alt="로고" />
       </div>
     </header>
 
@@ -111,7 +112,7 @@ const deleteAccount = async () => {
 }
 
 .logo img {
-  width: 100px;
+  width: 150px;
   height: auto;
 }
 

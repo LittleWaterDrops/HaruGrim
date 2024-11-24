@@ -212,7 +212,7 @@ const handleLogin = async () => {
 }
 
 .logo img {
-  width: 100px;
+  width: 150px;
   height: auto;
   cursor: pointer;
 }
