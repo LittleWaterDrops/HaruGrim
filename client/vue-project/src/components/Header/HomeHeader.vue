@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import axios from 'axios'
 
 const isDropdownOpen = ref(false)
 const router = useRouter()
@@ -31,11 +32,38 @@ const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
 }
 
-const logout = () => {
-  alert('로그아웃되었습니다.')
-  isDropdownOpen.value = false
-  router.push('/')
-}
+const logout = async () => {
+  const token = localStorage.getItem('accessToken'); // Access Token 가져오기
+
+  if (!token) {
+    alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+    router.push('/login');
+    return;
+  }
+
+  try {
+    await axios.post(
+      'http://localhost:8080/auth/logout',
+      {}, // 요청 본문은 비어 있음
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Authorization 헤더에 Access Token 포함
+        },
+      }
+    );
+
+    // Access Token 삭제
+    localStorage.removeItem('accessToken');
+
+    alert('로그아웃되었습니다.');
+    router.push('/');
+  } catch (error: any) {
+    console.error('로그아웃 실패:', error.response?.data || error.message);
+    alert('로그아웃 실패: ' + (error.response?.data?.message || '서버 오류'));
+  }
+};
+
+
 
 const viewProfile = () => {
   alert('회원 정보 조회 페이지로 이동합니다.')

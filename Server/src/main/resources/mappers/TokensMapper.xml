@@ -15,7 +15,8 @@
 	<select id="findTokenByValueAndType"
 		resultType="com.yh.model.dto.Tokens">
 		SELECT * FROM tokens
-		WHERE token = #{token} AND token_type = #{tokenType}
+		WHERE token = #{token} AND token_type =
+		#{tokenType}
 	</select>
 
 
@@ -23,5 +24,10 @@
 		SELECT * FROM tokens WHERE
 		user_id = #{userId}
 	</select>
+
+	<delete id="deleteTokenByUserIdAndType">
+		DELETE FROM tokens
+		WHERE user_id = #{userId} AND token_type = #{tokenType}
+	</delete>
 </mapper>
 

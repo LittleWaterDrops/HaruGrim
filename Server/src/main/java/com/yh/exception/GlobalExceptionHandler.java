@@ -1,16 +1,18 @@
 package com.yh.exception;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,6 +43,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ReviewNotFoundException.class)
 	public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+		Map<String, String> errorResponse = new HashMap<>();
+		errorResponse.put("message", ex.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
 	// 다른 모든 예외를 처리 (예: NullPointerException, IllegalArgumentException 등)

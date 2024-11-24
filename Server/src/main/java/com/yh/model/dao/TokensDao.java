@@ -17,5 +17,7 @@ public interface TokensDao {
 	
 	Tokens findTokenByValueAndType(@Param("token") String token, @Param("tokenType") String tokenType);
 
+	void deleteTokenByUserIdAndType(@Param("userId") Long userId, @Param("tokenType") String tokenType);
+
 //	List<Tokens> findByUserId(@Param("userId") Long userId);
 }

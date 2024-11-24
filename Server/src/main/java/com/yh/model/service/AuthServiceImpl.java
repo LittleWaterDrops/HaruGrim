@@ -32,8 +32,15 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public TokenResponse login(Auth auth) {
 	    Auth foundAuth = authDao.findUserByUserEmail(auth.getEmail());
-	    if (foundAuth == null || !foundAuth.getPassword().equals(auth.getPassword())) {
-	        throw new IllegalArgumentException("로그인 실패");
+
+	    // 이메일이 틀린 경우
+	    if (foundAuth == null) {
+	        throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+	    }
+
+	    // 비밀번호가 틀린 경우
+	    if (!foundAuth.getPassword().equals(auth.getPassword())) {
+	        throw new IllegalArgumentException("비밀번호가 틀립니다.");
 	    }
 
 	    String accessToken = jwtUtil.generateAccessToken(foundAuth.getId());
@@ -44,47 +51,54 @@ public class AuthServiceImpl implements AuthService {
 	    return new TokenResponse(accessToken, refreshToken);
 	}
 
-	@Override
-	public void logout(String refreshToken) {
-	    Long userId = jwtUtil.validateRefreshToken(refreshToken);
-	    if (userId == null) {
-	        throw new IllegalArgumentException("Invalid Refresh Token");
-	    }
-
-	    tokensDao.deleteTokenByValue(refreshToken);
-	}
 
 	@Override
 	public TokenResponse refreshToken(String refreshToken) {
-	    // Refresh Token 검증
-	    Long userId = jwtUtil.validateRefreshToken(refreshToken);
+		// Refresh Token 검증
+		Long userId = jwtUtil.validateRefreshToken(refreshToken);
 
-	    // 데이터베이스에서 Refresh Token 확인
-	    Tokens token = tokensDao.findTokenByValueAndType(refreshToken, "REFRESH");
-	    if (token == null) {
-	        throw new IllegalArgumentException("Invalid Refresh Token");
+		// 데이터베이스에서 Refresh Token 확인
+		Tokens token = tokensDao.findTokenByValueAndType(refreshToken, "REFRESH");
+		if (token == null) {
+			throw new IllegalArgumentException("Invalid Refresh Token");
+		}
+
+		// 새로운 Access Token 생성
+		String newAccessToken = jwtUtil.generateAccessToken(userId);
+
+		return new TokenResponse(newAccessToken, refreshToken);
+	}
+
+	@Override
+	public void logout(String accessToken) {
+	    // Access Token 검증
+	    Long userId = jwtUtil.validateAccessToken(accessToken);
+	    System.out.println(userId);
+
+	    if (userId == null) {
+	        throw new IllegalArgumentException("Invalid Access Token");
 	    }
 
-	    // 새로운 Access Token 생성
-	    String newAccessToken = jwtUtil.generateAccessToken(userId);
-
-	    return new TokenResponse(newAccessToken, refreshToken);
+	    // Refresh Token 삭제
+	    tokensDao.deleteTokenByUserIdAndType(userId, "REFRESH");
 	}
 
 
 	@Override
-	public void deleteAccount(String refreshToken) {
-		Long userId = jwtUtil.validateRefreshToken(refreshToken);
+	public void deleteAccount(String accessToken) {
+	    // Access Token 검증
+	    Long userId = jwtUtil.validateAccessToken(accessToken);
 
-		if (userId == null) {
-			throw new IllegalArgumentException("Invalid Refresh Token");
-		}
+	    if (userId == null) {
+	        throw new IllegalArgumentException("Invalid Access Token");
+	    }
 
-		// 1. Refresh Token 삭제
-		tokensDao.deleteTokenByValue(refreshToken);
+	    // 1. Refresh Token 삭제
+	    tokensDao.deleteTokenByUserIdAndType(userId, "REFRESH");
 
-		// 2. 사용자 계정 삭제
-		userDao.deleteUserById(userId);
+	    // 2. 사용자 계정 삭제
+	    userDao.deleteUserById(userId);
 	}
+
 
 }
