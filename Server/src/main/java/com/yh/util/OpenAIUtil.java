@@ -2,6 +2,7 @@ package com.yh.util;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -27,10 +28,19 @@ public class OpenAIUtil {
 	public OpenAIUtil(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
+	
 
 	public String generateImageFromReview(String title, String content) {
-	    // 기본 스타일 설명
-	    String baseStyle = "Bright and cute cartoon-style illustration. Use pink and white as the main colors, emphasizing a cheerful and warm atmosphere.";
+		// 여러 스타일 정의
+	    String[] styles = {
+	        "A bright and cheerful cartoon-style diary illustration.",
+	        "A bright and cheerful cartoon-style diary illustration. The artwork features warm tones, cute details, and a focus on daily life. The characters and objects are drawn in a simple, colorful, and soft style, evoking a cozy and happy feeling. Pink and white are the primary colors, with additional pastel accents.\"",
+	        "A futuristic sci-fi digital artwork with neon accents.",
+	        "A soft watercolor painting evoking calm and serenity."
+	    };
+
+	    // 랜덤 스타일 선택
+	    String baseStyle = styles[new Random().nextInt(styles.length)];
 
 	    // 동적 프롬프트 작성
 	    String dynamicDetails = String.format(" The illustration shows: inspired by the following:\n- Title: %s\n- Content: %s.", title, content);
