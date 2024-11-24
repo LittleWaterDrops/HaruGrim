@@ -6,14 +6,7 @@
         제목 리스트와 갤러리 보기, <br />
         원하는 방식으로 더 쉽게 즐기세요.
       </h2>
-      <div class="view-toggle">
-        <button :class="{ active: !isGalleryView }" @click="toggleView('list')">
-          리스트로 보기
-        </button>
-        <button :class="{ active: isGalleryView }" @click="toggleView('gallery')">
-          갤러리로 보기
-        </button>
-      </div>
+      <ViewToggle :current-view="isGalleryView ? 'gallery' : 'list'" @update:view="toggleView" />
     </div>
 
     <div class="view-content">
@@ -22,6 +15,7 @@
           v-for="(item, index) in items"
           :key="'gallery-' + index"
           :imageUrl="item.imageUrl"
+          :title="item.title"
           :content="item.content"
         />
       </div>
@@ -30,7 +24,7 @@
         <ListItem
           v-for="(item, index) in items"
           :key="'list-' + index"
-          :title="item.content"
+          :title="item.title"
           :date="item.date"
         />
       </div>
@@ -42,31 +36,37 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import GalleryItem from '../HomeView/GalleryItem.vue'
 import ListItem from '../HomeView/ListItem.vue'
+import ViewToggle from '../HomeView/ViewToggle.vue'
 
 const items = [
   {
     imageUrl: 'https://via.placeholder.com/150x225?text=Image+1',
+    title: '제목 1',
     content: '제목 1',
     date: '2024.11.24',
   },
   {
     imageUrl: 'https://via.placeholder.com/150x225?text=Image+2',
-    content: '제목 2',
+    title: '제목 2',
+    content: '제목 1',
     date: '2024.11.24',
   },
   {
     imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
-    content: '제목 3',
+    title: '제목 3',
+    content: '제목 1',
     date: '2024.11.24',
   },
   {
     imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
-    content: '제목 4',
+    title: '제목 4',
+    content: '제목 1',
     date: '2024.11.24',
   },
   {
     imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
-    content: '제목 5',
+    title: '제목 5',
+    content: '제목 1',
     date: '2024.11.24',
   },
 ]
@@ -145,30 +145,7 @@ onUnmounted(() => {
   font-weight: 600;
   line-height: 1.7;
   color: var(--letter-black);
-}
-
-.view-toggle {
-  margin-top: 50px;
-  margin-left: 0px;
-}
-
-.view-toggle button {
-  margin-right: 15px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: var(--letter-black);
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-}
-
-.view-toggle button.active {
-  color: var(--primary-500);
-}
-
-.view-toggle button:hover {
-  color: var(--primary-600);
+  margin-bottom: 50px;
 }
 
 .view-content {

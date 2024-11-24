@@ -92,7 +92,7 @@ const deleteAccount = () => {
 .profile-main {
   width: 100%;
   background: #fff;
-  padding: 20px;
+  padding: 50px 30px 40px 30px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -127,6 +127,7 @@ const deleteAccount = () => {
   position: relative;
   display: inline-block;
   width: 100%;
+  margin-top: 30px;
   padding: 10px;
   background-color: var(--background);
   color: var(--danger);

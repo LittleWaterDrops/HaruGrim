@@ -4,14 +4,7 @@
 
     <transition name="fade">
       <div class="view-actions" v-if="isViewActionsVisible">
-        <div class="view-toggle">
-          <button :class="{ active: viewMode === 'list' }" @click="toggleViewMode('list')">
-            리스트로 보기
-          </button>
-          <button :class="{ active: viewMode === 'gallery' }" @click="toggleViewMode('gallery')">
-            갤러리로 보기
-          </button>
-        </div>
+        <ViewToggle :current-view="viewMode" @update:view="toggleViewMode" />
         <button @click="handleWriteButtonClick" class="write-review-button view-toggle-button">
           {{ isReviewFormOpen || isReviewViewOpen ? '닫기' : '회고 작성' }}
         </button>
@@ -44,6 +37,7 @@
                   :key="item.id"
                   @click="openReviewView(item)"
                   :imageUrl="item.imageUrl"
+                  :title="item.title"
                   :content="item.content"
                   :style="{ animationDelay: `${index * 50}ms` }"
                   class="accordion-item"
@@ -73,7 +67,9 @@
                   required
                   maxlength="400"
                   placeholder="회고 내용을 입력하세요 (최대 400자)"
+                  rows="6"
                 ></textarea>
+                <div class="char-counter">{{ reviewContent.length }} / 400</div>
               </div>
               <button
                 type="submit"
@@ -81,15 +77,20 @@
                 :disabled="isSubmitting"
                 style="margin-top: 20px"
               >
-                {{ isSubmitting ? '저장 중...' : '작성하기' }}
+                <span>{{ isSubmitting ? '저장 중...' : '작성하기' }}</span>
               </button>
             </form>
           </div>
 
           <div class="review-view" :class="{ visible: isReviewViewOpen }">
-            <h3>{{ selectedItem?.title }}</h3>
+            <h3 class="review-title">{{ selectedItem?.title }}</h3>
+            <p class="review-meta">
+              작성일: <span class="date">{{ formatDate(selectedItem?.createdAt) }}</span
+              ><br />
+              수정일: <span class="date">{{ formatDate(selectedItem?.updatedAt) }}</span>
+            </p>
             <img :src="selectedItem?.imageUrl" alt="이미지" class="review-image" />
-            <p>{{ selectedItem?.content }}</p>
+            <p class="review-content">{{ selectedItem?.content }}</p>
           </div>
         </div>
       </div>
@@ -101,13 +102,21 @@
 import HomeHeader from '@/components/Header/HomeHeader.vue'
 import GalleryItem from '@/components/HomeView/GalleryItem.vue'
 import ListItem from '@/components/HomeView/ListItem.vue'
+import ViewToggle from '@/components/HomeView/ViewToggle.vue'
 import { ref, onMounted } from 'vue'
 
-const viewMode = ref('list')
+const viewMode = ref<'list' | 'gallery'>('list')
 const isReviewFormOpen = ref(false)
 const isReviewViewOpen = ref(false)
 const isSubmitting = ref(false)
-const selectedItem = ref(null)
+const selectedItem = ref<{
+  id: number
+  title: string
+  content: string
+  imageUrl: string
+  createdAt: string
+  updatedAt: string
+} | null>(null)
 const isViewActionsVisible = ref(false)
 const isContentVisible = ref(false)
 
@@ -117,18 +126,15 @@ const items = ref(
     title: `제목 ${i + 1}`,
     content: `이것은 제목 ${i + 1}의 회고 내용입니다.`,
     imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
+    createdAt: '2024-11-24 14:30',
+    updatedAt: '2024-11-24 16:00',
   })),
 )
 
 const reviewTitle = ref('')
 const reviewContent = ref('')
 
-const resetReviewForm = () => {
-  reviewTitle.value = ''
-  reviewContent.value = ''
-}
-
-const toggleViewMode = (view) => {
+const toggleViewMode = (view: 'list' | 'gallery') => {
   viewMode.value = view
 }
 
@@ -143,7 +149,14 @@ const handleWriteButtonClick = () => {
   }
 }
 
-const openReviewView = (item) => {
+const openReviewView = (item: {
+  id: number
+  title: string
+  content: string
+  imageUrl: string
+  createdAt: string
+  updatedAt: string
+}) => {
   if (isReviewFormOpen.value) {
     isReviewFormOpen.value = false
     resetReviewForm()
@@ -157,8 +170,13 @@ const openReviewView = (item) => {
   }
 }
 
+const resetReviewForm = () => {
+  reviewTitle.value = ''
+  reviewContent.value = ''
+}
+
 const mockApiCall = () => {
-  return new Promise((resolve) => {
+  return new Promise<string>((resolve) => {
     setTimeout(() => {
       resolve(`https://via.placeholder.com/100?text=New+Item`)
     }, 1000)
@@ -175,6 +193,8 @@ const submitReview = async () => {
         title: reviewTitle.value,
         content: reviewContent.value,
         imageUrl,
+        createdAt: new Date().toString(),
+        updatedAt: new Date().toString(),
       }
       items.value.push(newItem)
       alert('회고가 작성되었습니다.')
@@ -186,6 +206,19 @@ const submitReview = async () => {
       resetReviewForm()
     }
   }
+}
+
+const formatDate = (dateString: string | undefined): string => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  })
 }
 
 onMounted(() => {
@@ -218,29 +251,6 @@ onMounted(() => {
   margin-top: 60px;
 }
 
-.view-toggle {
-  display: flex;
-  gap: 15px;
-}
-
-.view-toggle button {
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: var(--letter-black);
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-}
-
-.view-toggle button.active {
-  color: var(--primary-500);
-}
-
-.view-toggle button:hover {
-  color: var(--primary-600);
-}
-
 .write-review-button {
   font-size: 1rem;
   border: none;
@@ -248,7 +258,9 @@ onMounted(() => {
   cursor: pointer;
   color: var(--letter-black);
   background-color: transparent;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .write-review-button.active {
@@ -263,7 +275,10 @@ onMounted(() => {
   flex: 1;
   display: flex;
   overflow: hidden;
-  padding: 0 10%;
+  padding: 0 8%;
+  background:
+    /* linear-gradient(to bottom, #ffffff, transparent), */ url('https://images.unsplash.com/photo-1543497415-75c0a27177c0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fCVFQyVCMSU4NSUyMCVFRCU4QyU4QyVFQiU5RSU4MCVFQyU4MyU4OXxlbnwwfHwwfHx8MA%3D%3D')
+    no-repeat center center/cover;
 }
 
 .content-main {
@@ -274,9 +289,10 @@ onMounted(() => {
 .scrollable-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 30px 40px 30px 40px;
   transition: flex 0.3s ease-in-out;
   scrollbar-width: none;
+  background: var(--background);
 }
 
 .scrollable-content::-webkit-scrollbar {
@@ -336,21 +352,30 @@ onMounted(() => {
 .review-view.visible {
   flex: 0.5;
   width: auto;
-  padding: 20px;
+  padding: 30px 40px 30px 40px;
   opacity: 1;
   pointer-events: auto;
 }
 
 .review-image {
-  width: 100%;
+  width: 300px;
   height: auto;
-  margin-bottom: 10px;
+  margin: 35px auto;
   border-radius: 4px;
+  display: block;
   transition: opacity 0.3s ease-in-out;
 }
 
 .review-form h3 {
   margin-bottom: 10px;
+  color: var(--letter-black);
+}
+
+.review-view h3 {
+  font-size: 1.7rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--letter-black);
 }
 
 .review-form .form-group {
@@ -366,21 +391,83 @@ onMounted(() => {
 .review-form .form-group textarea {
   width: 100%;
   padding: 10px;
+  font-size: 0.9rem;
   border: 1px solid var(--base);
   border-radius: 4px;
 }
 
-.review-form .submit-button {
-  width: 100%;
-  padding: 20px;
-  background: var(--primary-500);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.review-form .form-group textarea {
+  resize: none;
 }
 
-.review-form .submit-button:hover {
-  background: var(--primary-600);
+.review-form .char-counter {
+  margin-top: 5px;
+  font-size: 0.8rem;
+  text-align: right;
+  color: var(--primary-600);
+}
+
+.submit-button {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: var(--primary-500);
+  color: var(--background);
+  border: 1px solid var(--primary-500);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.submit-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.submit-button:hover::before {
+  left: 0;
+}
+
+.submit-button:hover {
+  color: var(--primary-500);
+}
+
+.review-meta {
+  font-size: 0.9rem;
+  color: var(--letter-black);
+  margin-bottom: 10px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.review-meta .date {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.review-content {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: var(--letter-black);
+  line-height: 1.7;
 }
 </style>
