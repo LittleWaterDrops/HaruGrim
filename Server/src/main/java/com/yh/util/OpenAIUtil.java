@@ -2,6 +2,7 @@ package com.yh.util;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -27,32 +28,43 @@ public class OpenAIUtil {
 	public OpenAIUtil(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
+	
 
 	public String generateImageFromReview(String title, String content) {
-		// 기본 스타일 설명
-		String baseStyle = "A bright and cheerful cartoon-style diary illustration. The artwork features warm tones, cute details, and a focus on daily life. The characters and objects are drawn in a simple, colorful, and soft style, evoking a cozy and happy feeling. Pink and white are the primary colors, with additional pastel accents.";
+		// 여러 스타일 정의
+	    String[] styles = {
+	        "A bright and cheerful cartoon-style diary illustration.",
+	        "A bright and cheerful cartoon-style diary illustration. The artwork features warm tones, cute details, and a focus on daily life. The characters and objects are drawn in a simple, colorful, and soft style, evoking a cozy and happy feeling. Pink and white are the primary colors, with additional pastel accents.\"",
+	        "A futuristic sci-fi digital artwork with neon accents.",
+	        "A soft watercolor painting evoking calm and serenity."
+	    };
 
-		// 동적 프롬프트 작성
-		String dynamicDetails = String.format(
-				" The illustration shows: inspired by the following:\n- Title: %s\n- Content: %s.", title, content);
+	    // 랜덤 스타일 선택
+	    String baseStyle = styles[new Random().nextInt(styles.length)];
 
-		// 최종 프롬프트
-		String prompt = baseStyle + dynamicDetails;
+	    // 동적 프롬프트 작성
+	    String dynamicDetails = String.format(" The illustration shows: inspired by the following:\n- Title: %s\n- Content: %s.", title, content);
 
-		// OpenAI API 호출
+	    // 최종 프롬프트
+	    String prompt = baseStyle + dynamicDetails;
 
-		return generateImage(prompt);
+	    // OpenAI API 호출
+	    
+	    return generateImage(prompt);
 	}
+
 
 	public String generateImage(String prompt) {
 //		return "https://dummyimage.com/600x400/000/fff&text=MockImage";
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + apiKey);
 		headers.set("Content-Type", "application/json");
-
+		
+		
 		System.out.println("prompt :" + prompt);
-
-		Map<String, Object> requestBody = Map.of("prompt", prompt, "n", 1, // 한 번에 생성할 이미지 수
+		
+		Map<String, Object> requestBody = Map.of("prompt", prompt,
+				"n", 1, // 한 번에 생성할 이미지 수
 				"size", "512x512" // 이미지 크기
 		);
 

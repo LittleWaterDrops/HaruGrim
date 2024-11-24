@@ -7,7 +7,8 @@
 
     <div class="profile-menu">
       <button @click="toggleDropdown" class="profile-button">
-        <img src="https://via.placeholder.com/40x40?text=User" alt="프로필" />
+        <!-- <img src="https://via.placeholder.com/40x40?text=User" alt="프로필" /> -->
+        <img src="/images/user2.png" alt="프로필" />
       </button>
       <transition name="dropdown">
         <div v-show="isDropdownOpen" class="dropdown">
@@ -108,8 +109,8 @@ const viewProfile = () => {
 }
 
 .profile-button img {
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 }
 
