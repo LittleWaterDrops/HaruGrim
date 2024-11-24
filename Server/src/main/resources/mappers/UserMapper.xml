@@ -11,12 +11,23 @@
 
 	<update id="updateUser">
 		UPDATE users
-		SET username = #{username}, email = #{email}, updated_at = NOW()
+		SET username = #{username}, email =
+		#{email}, updated_at = NOW()
 		WHERE id = #{id}
 	</update>
 
 	<delete id="deleteUserById">
 		DELETE FROM users WHERE id = #{id}
 	</delete>
+
+	<!-- 이메일로 사용자 조회 -->
+	<select id="findByEmail" resultType="com.yh.model.dto.User">
+		SELECT * FROM users WHERE email = #{email}
+	</select>
+
+	<!-- 유저명으로 사용자 조회 -->
+	<select id="findByUsername" resultType="com.yh.model.dto.User">
+		SELECT * FROM users WHERE username = #{username}
+	</select>
 
 </mapper>

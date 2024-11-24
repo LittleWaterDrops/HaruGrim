@@ -99,6 +99,16 @@ public class AuthServiceImpl implements AuthService {
 	    // 2. 사용자 계정 삭제
 	    userDao.deleteUserById(userId);
 	}
+	
+	@Override
+    public boolean isEmailTaken(String email) {
+        return userDao.findByEmail(email) != null;
+    }
+
+    @Override
+    public boolean isUsernameTaken(String username) {
+        return userDao.findByUsername(username) != null;
+    }
 
 
 }

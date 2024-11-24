@@ -132,13 +132,50 @@ onMounted(() => {
   typeText()
 })
 
-const validateEmail = () => {
+const validateEmail = async () => {
   if (!email.value.includes('@')) {
-    alert('유효한 이메일 주소를 입력해주세요.')
-    return
+    alert('유효한 이메일 주소를 입력해주세요.');
+    return;
   }
-  step.value = 2
-}
+
+  try {
+    // 서버에 이메일 중복 확인 요청
+    const response = await axios.get('http://localhost:8080/auth/check-email', {
+      params: { email: email.value },
+    });
+    console.log(response.data); // 서버의 성공 메시지 출력
+    step.value = 2; // 다음 단계로 진행
+  } catch (error: any) {
+    if (error.response?.status === 409) {
+      alert('이메일이 중복됩니다.');
+    } else {
+      alert('중복 확인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
+    }
+  }
+};
+
+const validateUsername = async () => {
+  if (!username.value.trim()) {
+    alert('유저명을 입력해주세요.');
+    return;
+  }
+
+  try {
+    // 서버에 유저명 중복 확인 요청
+    const response = await axios.get('http://localhost:8080/auth/check-username', {
+      params: { username: username.value },
+    });
+    console.log(response.data); // 서버의 성공 메시지 출력
+    step.value = 4; // 다음 단계로 진행
+  } catch (error: any) {
+    if (error.response?.status === 409) {
+      alert('유저명이 중복됩니다.');
+    } else {
+      alert('중복 확인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
+    }
+  }
+};
+
 
 const validatePassword = () => {
   if (password.value.length < 6) {
@@ -148,13 +185,7 @@ const validatePassword = () => {
   step.value = 3
 }
 
-const validateUsername = () => {
-  if (!username.value.trim()) {
-    alert('유저명을 입력해주세요.')
-    return
-  }
-  step.value = 4
-}
+
 
 const handleSignUp = async () => {
   try {
