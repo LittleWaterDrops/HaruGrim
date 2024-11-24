@@ -156,19 +156,6 @@ const validateUsername = () => {
   step.value = 4
 }
 
-// const handleSignUp = () => {
-//   if (email.value && password.value && username.value) {
-//     console.log('회원가입 성공:', {
-//       email: email.value,
-//       password: password.value,
-//       username: username.value,
-//     })
-//     router.push('/welcome')
-//   } else {
-//     alert('모든 필드를 올바르게 입력해주세요.')
-//   }
-// }
-
 const handleSignUp = async () => {
   try {
     await axios.post('http://localhost:8080/auth/signup', {

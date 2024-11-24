@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 
@@ -43,13 +44,38 @@ const goBack = () => {
   router.back()
 }
 
-const deleteAccount = () => {
-  const confirmed = confirm('정말로 회원 탈퇴를 진행하시겠습니까?')
-  if (confirmed) {
-    alert('회원 탈퇴가 완료되었습니다.')
-    router.push('/')
+const deleteAccount = async () => {
+  const token = localStorage.getItem('accessToken'); // Access Token 가져오기
+
+  if (!token) {
+    alert('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+    router.push('/login');
+    return;
   }
-}
+
+  const confirmed = confirm('정말로 회원 탈퇴를 진행하시겠습니까?');
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await axios.delete('http://localhost:8080/auth/delete', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Authorization 헤더에 Access Token 포함
+      },
+    });
+
+    // 로컬 스토리지에서 Access Token 삭제
+    localStorage.removeItem('accessToken');
+
+    alert('회원 탈퇴가 완료되었습니다.');
+    router.push('/');
+  } catch (error: any) {
+    console.error('회원 탈퇴 실패:', error.response?.data || error.message);
+    alert('회원 탈퇴 실패: ' + (error.response?.data?.message || '서버 오류'));
+  }
+};
+
 </script>
 
 <style scoped>

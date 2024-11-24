@@ -76,9 +76,17 @@ const handleLogin = async () => {
     alert('로그인 성공!')
     router.push('/home')
   } catch (error: any) {
-    alert('로그인 실패: ' + (error.response?.data?.message || '알 수 없는 오류'))
+    const errorMessage = error.response?.data?.message || '로그인에 실패했습니다.'
+    if (errorMessage === '존재하지 않는 회원입니다.') {
+      alert('존재하지 않는 회원입니다. 이메일을 확인해주세요.')
+    } else if (errorMessage === '비밀번호가 틀립니다.') {
+      alert('비밀번호가 틀립니다. 다시 입력해주세요.')
+    } else {
+      alert(errorMessage)
+    }
   }
 }
+
 </script>
 
 <style scoped>

@@ -10,7 +10,8 @@ public interface AuthService {
 
     TokenResponse refreshToken(String refreshToken); // access토큰 재발급(Refresh 토큰 있을시)
 
-    void logout(String refreshToken); // Refresh Token 기반 로그아웃
-    
-    void deleteAccount(String refreshToken); // 회원탈퇴 메서드
+    void logout(String accessToken); // Access Token 기반 로그아웃
+
+    void deleteAccount(String accessToken); // Access Token 기반 회원탈퇴
+
 }
