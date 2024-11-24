@@ -29,32 +29,30 @@ public class OpenAIUtil {
 	}
 
 	public String generateImageFromReview(String title, String content) {
-	    // 기본 스타일 설명
-	    String baseStyle = "Bright and cute cartoon-style illustration. Use pink and white as the main colors, emphasizing a cheerful and warm atmosphere.";
+		// 기본 스타일 설명
+		String baseStyle = "A bright and cheerful cartoon-style diary illustration. The artwork features warm tones, cute details, and a focus on daily life. The characters and objects are drawn in a simple, colorful, and soft style, evoking a cozy and happy feeling. Pink and white are the primary colors, with additional pastel accents.";
 
-	    // 동적 프롬프트 작성
-	    String dynamicDetails = String.format(" The illustration shows: inspired by the following:\n- Title: %s\n- Content: %s.", title, content);
+		// 동적 프롬프트 작성
+		String dynamicDetails = String.format(
+				" The illustration shows: inspired by the following:\n- Title: %s\n- Content: %s.", title, content);
 
-	    // 최종 프롬프트
-	    String prompt = baseStyle + dynamicDetails;
+		// 최종 프롬프트
+		String prompt = baseStyle + dynamicDetails;
 
-	    // OpenAI API 호출
-	    
-	    return generateImage(prompt);
+		// OpenAI API 호출
+
+		return generateImage(prompt);
 	}
-
 
 	public String generateImage(String prompt) {
 //		return "https://dummyimage.com/600x400/000/fff&text=MockImage";
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + apiKey);
 		headers.set("Content-Type", "application/json");
-		
-		
+
 		System.out.println("prompt :" + prompt);
-		
-		Map<String, Object> requestBody = Map.of("prompt", prompt,
-				"n", 1, // 한 번에 생성할 이미지 수
+
+		Map<String, Object> requestBody = Map.of("prompt", prompt, "n", 1, // 한 번에 생성할 이미지 수
 				"size", "512x512" // 이미지 크기
 		);
 

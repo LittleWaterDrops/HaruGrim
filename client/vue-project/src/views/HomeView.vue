@@ -125,7 +125,8 @@ const items = ref(
     id: i + 1,
     title: `제목 ${i + 1}`,
     content: `이것은 제목 ${i + 1}의 회고 내용입니다.`,
-    imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
+    // imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
+    imageUrl: `/images/image${(i % 10) + 1}.png`, // 총 10개의 이미지가 반복되도록 설정
     createdAt: '2024-11-24 14:30',
     updatedAt: '2024-11-24 16:00',
   })),

@@ -45,10 +45,19 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import GalleryItem from '../HomeView/GalleryItem.vue'
 
 const images = [
-  'https://via.placeholder.com/300x400?text=Image+1',
-  'https://via.placeholder.com/300x400?text=Image+2',
-  'https://via.placeholder.com/300x400?text=Image+3',
-  'https://via.placeholder.com/300x400?text=Image+4',
+  // 'https://via.placeholder.com/300x400?text=Image+1',
+  // 'https://via.placeholder.com/300x400?text=Image+2',
+  // 'https://via.placeholder.com/300x400?text=Image+3',
+  // 'https://via.placeholder.com/300x400?text=Image+4',
+  '/images/image1.png',
+  '/images/image2.png',
+  '/images/image3.png',
+  '/images/image4.png',
+  '/images/image5.png',
+  '/images/image6.png',
+  '/images/image7.png',
+  '/images/image8.png',
+  '/images/image9.png',
 ]
 
 const isVisible = ref(false)

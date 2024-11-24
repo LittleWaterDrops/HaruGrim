@@ -2,7 +2,8 @@
   <div class="login-container">
     <header class="login-header">
       <router-link to="/" class="logo">
-        <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" />
+        <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
+        <img src="`/images/logo3.png`" alt="로고" />
       </router-link>
     </header>
 

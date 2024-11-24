@@ -1,7 +1,8 @@
 <template>
   <header class="home-header">
     <router-link to="/" class="logo">
-      <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" />
+      <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
+      <img src="`/images/logo3.png`" alt="로고" />
     </router-link>
 
     <div class="profile-menu">
@@ -89,8 +90,8 @@ const viewProfile = () => {
 }
 
 .home-header .logo img {
-  width: 24px;
-  height: 24px;
+  width: 100px;
+  height: 30px;
   cursor: pointer;
 }
 
