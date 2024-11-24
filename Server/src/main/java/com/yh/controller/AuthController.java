@@ -4,10 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yh.model.dto.Auth;
@@ -51,26 +53,43 @@ public class AuthController {
 		return ResponseEntity.ok(tokenResponse); // Access, Refresh 토큰 반환
 	}
 
-
 	@Operation(summary = "로그아웃", description = "로그아웃 API입니다.")
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout(@RequestHeader(value = "Authorization", required = false) String accessToken) {
-	    System.out.println("Authorization 헤더 값: " + accessToken); // 헤더 값 출력
+		System.out.println("Authorization 헤더 값: " + accessToken); // 헤더 값 출력
 
-	    if (accessToken == null || accessToken.isEmpty()) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Authorization 헤더가 필요합니다.");
-	    }
+		if (accessToken == null || accessToken.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Authorization 헤더가 필요합니다.");
+		}
 
-	    // "Bearer " 접두사를 제거
-	    String token = accessToken.replace("Bearer ", "");
-	    System.out.println(token);
+		// "Bearer " 접두사를 제거
+		String token = accessToken.replace("Bearer ", "");
+		System.out.println(token);
 
-	    // Access Token 검증 로직
-	    authService.logout(token);
+		// Access Token 검증 로직
+		authService.logout(token);
 
-	    return ResponseEntity.ok("로그아웃 성공");
+		return ResponseEntity.ok("로그아웃 성공");
 	}
 
+	@Operation(summary = "이메일 중복 확인", description = "이메일 중복을 확인하는 API입니다.")
+	@GetMapping("/check-email")
+	public ResponseEntity<String> checkEmail(@RequestParam String email) {
+		if (authService.isEmailTaken(email)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("이메일이 중복됩니다.");
+		}
+		return ResponseEntity.ok("사용 가능한 이메일입니다.");
+	}
+
+	
+	@Operation(summary = "유저명 중복 확인", description = "유저명 중복을 확인하는 API입니다.")
+	@GetMapping("/check-username")
+	public ResponseEntity<String> checkUsername(@RequestParam String username) {
+		if (authService.isUsernameTaken(username)) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("유저명이 중복됩니다.");
+		}
+		return ResponseEntity.ok("사용 가능한 유저명입니다.");
+	}
 
 	@Operation(summary = "토큰 갱신", description = "Refresh Token을 사용하여 Access Token을 갱신합니다.")
 	@PostMapping("/refresh")
