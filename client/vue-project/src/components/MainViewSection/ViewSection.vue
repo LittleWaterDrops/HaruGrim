@@ -21,17 +21,18 @@
         <GalleryItem
           v-for="(item, index) in items"
           :key="'gallery-' + index"
-          :imageUrl="`https://via.placeholder.com/150x225?text=Image+${index + 1}`"
-          :content="`이미지 설명 ${index + 1}`"
+          :imageUrl="item.imageUrl"
+          :content="item.content"
         />
       </div>
 
       <div v-else class="list-view">
-        <ul>
-          <li v-for="(item, index) in items" :key="'list-' + index">
-            {{ item }}
-          </li>
-        </ul>
+        <ListItem
+          v-for="(item, index) in items"
+          :key="'list-' + index"
+          :title="item.content"
+          :date="item.date"
+        />
       </div>
     </div>
   </section>
@@ -40,8 +41,35 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import GalleryItem from '../HomeView/GalleryItem.vue'
+import ListItem from '../HomeView/ListItem.vue'
 
-const items = ['제목 1', '제목 2', '제목 3', '제목 4', '제목 5']
+const items = [
+  {
+    imageUrl: 'https://via.placeholder.com/150x225?text=Image+1',
+    content: '제목 1',
+    date: '2024.11.24',
+  },
+  {
+    imageUrl: 'https://via.placeholder.com/150x225?text=Image+2',
+    content: '제목 2',
+    date: '2024.11.24',
+  },
+  {
+    imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
+    content: '제목 3',
+    date: '2024.11.24',
+  },
+  {
+    imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
+    content: '제목 4',
+    date: '2024.11.24',
+  },
+  {
+    imageUrl: 'https://via.placeholder.com/150x225?text=Image+3',
+    content: '제목 5',
+    date: '2024.11.24',
+  },
+]
 
 const isGalleryView = ref(false)
 
@@ -145,13 +173,13 @@ onUnmounted(() => {
 
 .view-content {
   margin-top: 10px;
-  height: 500px;
+  height: auto;
 }
 
 .gallery-view {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 30px;
 }
 
 .list-view ul {

@@ -4,10 +4,15 @@
 
     <transition name="fade">
       <div class="view-actions" v-if="isViewActionsVisible">
-        <button @click="toggleViewMode" class="toggle-view-button">
-          {{ viewMode === 'list' ? '갤러리로 보기' : '리스트로 보기' }}
-        </button>
-        <button @click="handleWriteButtonClick" class="write-review-button">
+        <div class="view-toggle">
+          <button :class="{ active: viewMode === 'list' }" @click="toggleViewMode('list')">
+            리스트로 보기
+          </button>
+          <button :class="{ active: viewMode === 'gallery' }" @click="toggleViewMode('gallery')">
+            갤러리로 보기
+          </button>
+        </div>
+        <button @click="handleWriteButtonClick" class="write-review-button view-toggle-button">
           {{ isReviewFormOpen || isReviewViewOpen ? '닫기' : '회고 작성' }}
         </button>
       </div>
@@ -18,22 +23,26 @@
         <div class="content-main">
           <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
             <div v-if="viewMode === 'list'" class="list-view">
-              <div
-                v-for="item in items"
+              <ListItem
+                v-for="(item, index) in items"
                 :key="item.id"
-                class="list-item"
+                :title="item.title"
+                :date="'2024.11.24'"
                 @click="openReviewView(item)"
-              >
-                {{ item.title }}
-              </div>
+                :style="{ animationDelay: `${index * 50}ms` }"
+                class="accordion-item"
+              />
+              <div class="list-view-end-space"></div>
             </div>
             <div v-else class="gallery-view">
               <GalleryItem
-                v-for="item in items"
+                v-for="(item, index) in items"
                 :key="item.id"
                 @click="openReviewView(item)"
                 :imageUrl="item.imageUrl"
                 :content="item.content"
+                :style="{ animationDelay: `${index * 50}ms` }"
+                class="accordion-item"
               />
             </div>
           </div>
@@ -69,6 +78,7 @@
 <script setup lang="ts">
 import HomeHeader from '@/components/Header/HomeHeader.vue'
 import GalleryItem from '@/components/HomeView/GalleryItem.vue'
+import ListItem from '@/components/HomeView/ListItem.vue'
 import { ref, onMounted } from 'vue'
 
 const viewMode = ref('list')
@@ -96,8 +106,8 @@ const resetReviewForm = () => {
   reviewContent.value = ''
 }
 
-const toggleViewMode = () => {
-  viewMode.value = viewMode.value === 'list' ? 'gallery' : 'list'
+const toggleViewMode = (view) => {
+  viewMode.value = view
 }
 
 const handleWriteButtonClick = () => {
@@ -186,23 +196,52 @@ onMounted(() => {
   margin-top: 60px;
 }
 
-.view-actions button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  background-color: var(--primary-500);
-  color: white;
-  cursor: pointer;
+.view-toggle {
+  display: flex;
+  gap: 15px;
 }
 
-.view-actions button:hover {
-  background-color: var(--primary-600);
+.view-toggle button {
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--letter-black);
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.view-toggle button.active {
+  color: var(--primary-500);
+}
+
+.view-toggle button:hover {
+  color: var(--primary-600);
+}
+
+.write-review-button {
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--letter-black);
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.write-review-button.active {
+  color: var(--primary-500);
+}
+
+.write-review-button:hover {
+  color: var(--primary-600);
 }
 
 .content {
   flex: 1;
   display: flex;
   overflow: hidden;
+  padding: 0 10%;
 }
 
 .content-main {
@@ -215,6 +254,11 @@ onMounted(() => {
   overflow-y: auto;
   padding: 20px;
   transition: flex 0.3s ease-in-out;
+  scrollbar-width: none;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  display: none;
 }
 
 .scrollable-content.shrink {
@@ -227,19 +271,31 @@ onMounted(() => {
   gap: 10px;
 }
 
-.list-item {
-  padding: 15px;
-  background: var(--base-light);
-  border: 1px solid var(--base);
-  border-radius: 4px;
-  cursor: pointer;
+.list-view-end-space {
+  height: 20px;
 }
 
 .gallery-view {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  gap: 30px;
+  justify-content: flex-start;
+}
+
+.accordion-item {
+  animation: accordionFadeIn 0.25s ease-in-out forwards;
+  opacity: 0;
+}
+
+@keyframes accordionFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .review-form,
