@@ -23,6 +23,7 @@
         <div class="content-main">
           <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
             <div v-if="viewMode === 'list'" class="list-view">
+              <h3>리스트로 보기</h3>
               <ListItem
                 v-for="(item, index) in items"
                 :key="item.id"
@@ -34,16 +35,20 @@
               />
               <div class="list-view-end-space"></div>
             </div>
+
             <div v-else class="gallery-view">
-              <GalleryItem
-                v-for="(item, index) in items"
-                :key="item.id"
-                @click="openReviewView(item)"
-                :imageUrl="item.imageUrl"
-                :content="item.content"
-                :style="{ animationDelay: `${index * 50}ms` }"
-                class="accordion-item"
-              />
+              <h3>갤러리로 보기</h3>
+              <div class="gallery-field">
+                <GalleryItem
+                  v-for="(item, index) in items"
+                  :key="item.id"
+                  @click="openReviewView(item)"
+                  :imageUrl="item.imageUrl"
+                  :content="item.content"
+                  :style="{ animationDelay: `${index * 50}ms` }"
+                  class="accordion-item"
+                />
+              </div>
             </div>
           </div>
 
@@ -52,13 +57,30 @@
             <form @submit.prevent="submitReview">
               <div class="form-group">
                 <label for="review-title">제목</label>
-                <input type="text" id="review-title" v-model="reviewTitle" required />
+                <input
+                  type="text"
+                  id="review-title"
+                  v-model="reviewTitle"
+                  required
+                  placeholder="회고의 제목을 입력하세요"
+                />
               </div>
               <div class="form-group">
-                <label for="review-content">회고</label>
-                <textarea id="review-content" v-model="reviewContent" required></textarea>
+                <label for="review-content">회고 내용</label>
+                <textarea
+                  id="review-content"
+                  v-model="reviewContent"
+                  required
+                  maxlength="400"
+                  placeholder="회고 내용을 입력하세요 (최대 400자)"
+                ></textarea>
               </div>
-              <button type="submit" class="submit-button" :disabled="isSubmitting">
+              <button
+                type="submit"
+                class="submit-button"
+                :disabled="isSubmitting"
+                style="margin-top: 20px"
+              >
                 {{ isSubmitting ? '저장 중...' : '작성하기' }}
               </button>
             </form>
@@ -276,6 +298,12 @@ onMounted(() => {
 }
 
 .gallery-view {
+  flex-direction: column;
+}
+
+.gallery-field {
+  margin-top: 10px;
+  margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
@@ -285,17 +313,6 @@ onMounted(() => {
 .accordion-item {
   animation: accordionFadeIn 0.25s ease-in-out forwards;
   opacity: 0;
-}
-
-@keyframes accordionFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .review-form,
@@ -355,7 +372,7 @@ onMounted(() => {
 
 .review-form .submit-button {
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   background: var(--primary-500);
   color: white;
   border: none;
