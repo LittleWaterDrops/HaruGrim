@@ -5,7 +5,8 @@
     :style="{ backgroundImage: `url(${imageUrl})` }"
   >
     <div class="overlay">
-      <p class="description">{{ content }}</p>
+      <p class="description title">{{ title }}</p>
+      <p class="description content">{{ content }}</p>
     </div>
   </div>
 </template>
@@ -13,6 +14,10 @@
 <script setup lang="ts">
 defineProps({
   imageUrl: {
+    type: String,
+    required: true,
+  },
+  title: {
     type: String,
     required: true,
   },
@@ -65,9 +70,8 @@ defineProps({
   border-radius: inherit;
   color: white;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  flex-direction: column;
+  padding: 10px;
   opacity: 0;
   transition:
     background 0.3s ease,
@@ -86,7 +90,28 @@ defineProps({
 
 .description {
   font-size: 0.9rem;
-  padding: 5px;
   line-height: 1.4;
+  margin: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.description.title {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.description.content {
+  font-size: 0.8rem;
+  max-height: calc(1.4em * 5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: block;
+  line-clamp: 5;
+  box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 </style>

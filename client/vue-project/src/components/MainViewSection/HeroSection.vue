@@ -78,7 +78,7 @@
   position: relative;
   display: inline-block;
   padding: 10px 30px;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
   font-size: 1rem;
   font-weight: 500;
   text-decoration: none;
