@@ -3,43 +3,89 @@
     <header class="profile-header">
       <button class="back-button" @click="goBack">←</button>
       <div class="logo">
-        <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
-        <img src="`/images/logo3.png`" alt="로고" />
+        <img src="/images/logo3.png" alt="로고" />
       </div>
     </header>
 
     <main class="profile-main">
-      <div class="form-group">
-        <label for="username">유저명</label>
-        <input type="text" id="username" v-model="profile.username" readonly />
+      <!-- 로딩 상태 -->
+      <div v-if="loading" class="loading-message">프로필 정보를 불러오는 중...</div>
+
+      <!-- 에러 메시지 -->
+      <div v-if="error" class="error-message">{{ error }}</div>
+
+      <!-- 프로필 정보 -->
+      <div v-else>
+        <div class="form-group">
+          <label for="username">유저명</label>
+          <input type="text" id="username" v-model="profile.username" readonly />
+        </div>
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input type="email" id="email" v-model="profile.email" readonly />
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" v-model="profile.password" readonly />
+        </div>
+        <button class="delete-account-button" @click="deleteAccount">
+          <span>회원 탈퇴</span>
+        </button>
       </div>
-      <div class="form-group">
-        <label for="email">이메일</label>
-        <input type="email" id="email" v-model="profile.email" readonly />
-      </div>
-      <div class="form-group">
-        <label for="password">비밀번호</label>
-        <input type="password" id="password" v-model="profile.password" readonly />
-      </div>
-      <button class="delete-account-button" @click="deleteAccount">
-        <span>회원 탈퇴</span>
-      </button>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const router = useRouter()
 
 const profile = ref({
-  username: '사용자명',
-  email: 'example@example.com',
+  username: '',
+  email: '',
   password: '********',
 })
+
+
+const loading = ref(true); // 로딩 상태
+const error = ref(''); // 에러 메시지
+
+const fetchProfile = async () => {
+  try {
+    loading.value = true;
+    error.value = '';
+
+    const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+    if (!token) {
+      throw new Error('로그인 상태가 아닙니다. 다시 로그인해주세요.');
+    }
+
+    const response = await axios.get('http://localhost:8080/users/my', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    profile.value = {
+      username: response.data.username,
+      email: response.data.email,
+      password: '********', // 비밀번호는 항상 마스킹 처리
+    };
+  } catch (err) {
+    console.error('프로필 정보를 가져오는 중 오류:', err);
+    error.value = '프로필 정보를 불러오는 중 오류가 발생했습니다.';
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchProfile();
+});
+
 
 const goBack = () => {
   router.back()

@@ -39,6 +39,7 @@ public class UserController {
 			System.out.println("Extracted Token: " + extractedToken); // 디버깅 로그
 			Long userId = jwtUtil.validateAccessToken(extractedToken);
 			System.out.println("Validated UserId: " + userId); // 디버깅 로그
+			
 			User user = userService.getProfile(userId);
 			return ResponseEntity.ok(user);
 		} catch (IllegalArgumentException e) {
