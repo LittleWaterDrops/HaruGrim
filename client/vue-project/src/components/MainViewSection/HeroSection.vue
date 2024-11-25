@@ -24,7 +24,7 @@
         </router-link>
       </div>
 
-      <div class="explore fade-in">
+      <div class="explore fade-in" v-if="!isLoggedIn">
         <p>
           <router-link to="/home">
             <button class="explore-btn">둘러볼게요!</button>

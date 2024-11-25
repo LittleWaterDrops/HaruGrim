@@ -8,7 +8,7 @@
       <button @click="toggleDropdown" class="profile-button">
         <img src="/images/user2.png" alt="프로필" />
       </button>
-      <transition name="dropdown">
+      <transition name="dropdown" v-if="isLoggedIn">
         <div v-show="isDropdownOpen" class="dropdown">
           <ul>
             <li @click="logout">로그아웃</li>
@@ -22,11 +22,17 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const isDropdownOpen = ref(false)
 const router = useRouter()
+const isLoggedIn = ref(true); // 로그인 상태
+
+onMounted(() => {
+  const token = localStorage.getItem('accessToken');
+  isLoggedIn.value = !!token; // 토큰 존재 여부로 로그인 상태 판단
+});
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value

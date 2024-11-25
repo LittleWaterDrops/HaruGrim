@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!-- TypeHandler 등록 -->
+    <typeHandlers>
+        <!-- JSON으로 변환할 List<String>을 처리하는 TypeHandler -->
+        <typeHandler handler="com.yh.util.JsonListTypeHandler"/>
+    </typeHandlers>
+
+
+    <!-- MyBatis 환경 설정 -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 트랜잭션 매니저 설정 -->
+            <transactionManager type="JDBC"/>
+
+            <!-- 데이터 소스 설정 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/yhdb?serverTimezone=UTC"/>
+                <property name="username" value="root"/>
+                <property name="password" value="ssafy"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+</configuration>
