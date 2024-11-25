@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="scroll-icon bounce">⬇</div>
+    <div class="scroll-icon bounce">▼</div>
   </section>
 </template>
 
@@ -62,7 +62,7 @@ onMounted(() => {
   height: 100vh;
   color: var(--letter-black);
   background:
-    /* linear-gradient(to bottom, #ffffff, transparent), */ url('https://images.unsplash.com/photo-1543497415-75c0a27177c0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fCVFQyVCMSU4NSUyMCVFRCU4QyU4QyVFQiU5RSU4MCVFQyU4MyU4OXxlbnwwfHwwfHx8MA%3D%3D')
+    linear-gradient(to bottom, #ffffff 5%, transparent), url('https://cdn.pixabay.com/photo/2021/03/23/22/00/eggs-6118730_1280.png')
     no-repeat center center/cover;
 }
 

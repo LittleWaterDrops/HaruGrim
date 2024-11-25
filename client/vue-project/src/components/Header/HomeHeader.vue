@@ -1,13 +1,11 @@
 <template>
   <header class="home-header">
     <router-link to="/" class="logo">
-      <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
       <img src="`/images/logo3.png`" alt="로고" />
     </router-link>
 
     <div class="profile-menu">
       <button @click="toggleDropdown" class="profile-button">
-        <!-- <img src="https://via.placeholder.com/40x40?text=User" alt="프로필" /> -->
         <img src="/images/user2.png" alt="프로필" />
       </button>
       <transition name="dropdown">
@@ -83,7 +81,7 @@ const viewProfile = () => {
   padding: 0 10%;
   padding-top: 10px;
   padding-bottom: 5px;
-  background-color: transparent;
+  background-color: var(--background);
   position: fixed;
   top: 0;
   left: 0;
@@ -109,8 +107,8 @@ const viewProfile = () => {
 }
 
 .profile-button img {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }
 

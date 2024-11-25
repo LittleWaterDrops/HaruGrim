@@ -13,7 +13,6 @@
 
     <transition name="fade">
       <div v-if="isImageSelectionVisible">
-        <!-- 모달 루트 요소 -->
         <div class="image-selection-modal">
           <h3>생성된 이미지 중 선택하세요</h3>
           <div class="image-options">
@@ -53,7 +52,7 @@
                 v-for="(item, index) in items"
                 :key="item.id"
                 :title="item.title"
-                :date="'2024.11.24'"
+                :date="formatDateToYMD(item.updatedAt)"
                 @click="openReviewView(item)"
                 :style="{ animationDelay: `${index * 50}ms` }"
                 class="accordion-item"
@@ -103,14 +102,6 @@
                 ></textarea>
                 <div class="char-counter">{{ reviewContent.length }} / 400</div>
               </div>
-              <!-- <button
-                type="submit"
-                class="submit-button"
-                :disabled="isSubmitting"
-                style="margin-top: 20px"
-              >
-                <span>{{ isSubmitting ? '저장 중...' : '작성하기' }}</span>
-              </button> -->
               <button
                 type="submit"
                 class="submit-button"
@@ -149,6 +140,7 @@ import ListItem from '@/components/HomeView/ListItem.vue'
 import ViewToggle from '@/components/HomeView/ViewToggle.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import router from '@/router'
 
 const viewMode = ref<'list' | 'gallery'>('list')
 const isReviewFormOpen = ref(false)
@@ -165,17 +157,13 @@ const selectedItem = ref<{
 const isViewActionsVisible = ref(false)
 const isContentVisible = ref(false)
 
-// const items = ref(
-//   Array.from({ length: 10 }, (_, i) => ({
-//     id: i + 1,
-//     title: `제목 ${i + 1}`,
-//     content: `이것은 제목 ${i + 1}의 회고 내용입니다.`,
-//     // imageUrl: `https://via.placeholder.com/100?text=Item+${i + 1}`,
-//     imageUrl: `/images/image${(i % 10) + 1}.png`, // 총 10개의 이미지가 반복되도록 설정
-//     createdAt: '2024-11-24 14:30',
-//     updatedAt: '2024-11-24 16:00',
-//   })),
-// )
+const formatDateToYMD = (dateString: string | undefined): string => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식 반환
+};
+
+
 
 const items = ref([
   {
@@ -262,13 +250,21 @@ const toggleViewMode = (view: 'list' | 'gallery') => {
 }
 
 const handleWriteButtonClick = () => {
+
   if (isReviewFormOpen.value || isReviewViewOpen.value) {
-    isReviewFormOpen.value = false
-    isReviewViewOpen.value = false
-    selectedItem.value = null
-    resetReviewForm()
+    isReviewFormOpen.value = false;
+    isReviewViewOpen.value = false;
+    selectedItem.value = null;
+    resetReviewForm();
   } else {
-    isReviewFormOpen.value = true
+    const token = localStorage.getItem('accessToken'); // Access Token 확인
+
+    if (!token) {
+      alert('로그인 상태가 아닙니다. 회고 작성을 위해 로그인이 필요합니다.');
+      return;
+    }
+
+    isReviewFormOpen.value = true;
   }
 }
 
@@ -297,39 +293,6 @@ const resetReviewForm = () => {
   reviewTitle.value = ''
   reviewContent.value = ''
 }
-
-const mockApiCall = () => {
-  return new Promise<string>((resolve) => {
-    setTimeout(() => {
-      resolve(`https://via.placeholder.com/100?text=New+Item`)
-    }, 1000)
-  })
-}
-
-// const submitReview = async () => {
-//   if (reviewTitle.value && reviewContent.value) {
-//     isSubmitting.value = true
-//     try {
-//       const imageUrl = await mockApiCall()
-//       const newItem = {
-//         id: items.value.length + 1,
-//         title: reviewTitle.value,
-//         content: reviewContent.value,
-//         imageUrl,
-//         createdAt: new Date().toString(),
-//         updatedAt: new Date().toString(),
-//       }
-//       items.value.push(newItem)
-//       alert('회고가 작성되었습니다.')
-//     } catch (error) {
-//       alert('회고 작성 중 문제가 발생했습니다.')
-//     } finally {
-//       isSubmitting.value = false
-//       isReviewFormOpen.value = false
-//       resetReviewForm()
-//     }
-//   }
-// }
 
 const isImageSelectionVisible = ref(false) // 이미지 선택 UI 표시 여부
 const generatedImages = ref<string[]>([]) // 생성된 이미지 리스트
@@ -412,81 +375,6 @@ const finalizeReview = async () => {
   }
 }
 
-// const submitReview = async () => {
-//   if (!reviewTitle.value || !reviewContent.value) {
-//     alert('제목과 내용을 입력해주세요.')
-//     return
-//   }
-
-//   try {
-//     isSubmitting.value = true
-
-//     // 1. 이미지 3개 생성
-//     const token = localStorage.getItem('accessToken') // Authorization 헤더용 토큰
-//     const response = await axios.post(
-//       'http://localhost:8080/reviews/text-to-image',
-//       { title: reviewTitle.value, content: reviewContent.value },
-//       { headers: { Authorization: `Bearer ${token}` } },
-//     )
-
-//     generatedImages.value = response.data // 이미지 URL 배열
-//     console.log('Generated images:', generatedImages.value)
-
-//     // 2. 이미지 선택 UI 표시 (예: Modal)
-//     isImageSelectionVisible.value = true
-//   } catch (error) {
-//     console.error('이미지 생성 중 오류:', error)
-//     alert('이미지 생성 중 문제가 발생했습니다.')
-//   } finally {
-//     isSubmitting.value = false
-//   }
-// }
-
-// const finalizeReview = async () => {
-//   if (!selectedImage.value) {
-//     alert('이미지를 선택해주세요.')
-//     return
-//   }
-
-//   try {
-//     isSubmitting.value = true
-
-//     // 3. 선택된 이미지를 포함한 회고 저장
-//     const token = localStorage.getItem('accessToken')
-//     const response = await axios.post(
-//       'http://localhost:8080/reviews',
-//       {
-//         title: reviewTitle.value,
-//         content: reviewContent.value,
-//         imageUrl: selectedImage.value,
-//       },
-//       { headers: { Authorization: `Bearer ${token}` } },
-//     )
-
-//     const createdReview = response.data // 생성된 리뷰 데이터
-//     console.log('Review saved:', createdReview)
-
-//     // 4. 갤러리 리스트 업데이트
-//     items.value.push({
-//       id: createdReview.id,
-//       title: reviewTitle.value,
-//       content: reviewContent.value,
-//       imageUrl: selectedImage.value,
-//       createdAt: new Date().toString(),
-//       updatedAt: new Date().toString(),
-//     })
-
-//     alert('회고가 작성되었습니다!')
-//     resetReviewForm()
-//   } catch (error) {
-//     console.error('회고 저장 중 오류:', error)
-//     alert('회고 저장 중 문제가 발생했습니다.')
-//   } finally {
-//     isSubmitting.value = false
-//     isImageSelectionVisible.value = false
-//   }
-// }
-
 const formatDate = (dateString: string | undefined): string => {
   if (!dateString) return ''
   const date = new Date(dateString)
@@ -556,7 +444,7 @@ onMounted(() => {
   overflow: hidden;
   padding: 0 8%;
   background:
-    /* linear-gradient(to bottom, #ffffff, transparent), */ url('https://images.unsplash.com/photo-1543497415-75c0a27177c0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fCVFQyVCMSU4NSUyMCVFRCU4QyU4QyVFQiU5RSU4MCVFQyU4MyU4OXxlbnwwfHwwfHx8MA%3D%3D')
+    /* linear-gradient(to bottom, #ffffff, transparent), */ url('https://cdn.pixabay.com/photo/2021/03/23/22/00/eggs-6118730_1280.png')
     no-repeat center center/cover;
 }
 
