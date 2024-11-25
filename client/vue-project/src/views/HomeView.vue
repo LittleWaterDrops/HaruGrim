@@ -33,6 +33,16 @@
     </transition>
 
     <transition name="fade">
+      <!-- 로딩 화면 -->
+      <div v-if="isSubmitting" class="loading-overlay">
+        <div class="loading-container">
+          <div class="loading-spinner"></div>
+          <p>이미지를 생성 중입니다. 잠시만 기다려주세요...</p>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="fade">
       <div class="content" v-if="isContentVisible">
         <div class="content-main">
           <div class="scrollable-content" :class="{ shrink: isReviewFormOpen || isReviewViewOpen }">
@@ -231,9 +241,6 @@ const items = ref([
     updatedAt: '2024-11-25 16:00',
   },
 ])
-
-
-
 
 const reviewTitle = ref('')
 const reviewContent = ref('')
@@ -631,47 +638,81 @@ onMounted(() => {
   line-height: 1.7;
 }
 
+/* 명시적인 로딩 오버레이 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.loading-container {
+  text-align: center;
+  color: white;
+}
+
+.loading-container .loading-spinner {
+  width: 50px; /* 기존보다 큰 스피너 */
+  height: 50px;
+  border: 5px solid transparent;
+  border-top: 5px solid white;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  animation: spin 1s linear infinite;
+}
+
+/* 모달 스타일 조정 */
 .image-selection-modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  padding: 20px;
+  width: 90%; /* 모달 크기 확대 */
+  max-width: 800px; /* 더 큰 화면에서도 잘 보이도록 */
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  padding: 30px;
   z-index: 1000;
 }
 
 .image-options {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   justify-content: center;
-  margin: 20px 0;
+  flex-wrap: wrap; /* 작은 화면에서 줄바꿈 */
+  margin: 30px 0;
 }
 
 .image-option {
-  width: 100px;
-  height: auto;
+  width: 150px; /* 이미지 크기 확대 */
+  height: 150px;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  transition: all 0.3s ease;
 }
 
 .image-option.selected {
-  border-color: #4caf50;
+  border-color: var(--primary-500);
+  transform: scale(1.1); /* 선택된 이미지 확대 효과 */
 }
 
 .confirm-button {
   display: block;
   margin: 0 auto;
-  padding: 10px 20px;
-  background-color: #4caf50;
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  background-color: var(--primary-500);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }

@@ -3,7 +3,7 @@
     <div class="hero-content">
       <h1 class="hero-title fade-in">하루를 돌아보고,<br />나만의 이야기를 그려보세요.</h1>
 
-      <div class="button-group fade-in">
+      <div class="button-group fade-in" v-if="!isLoggedIn">
         <router-link to="/login">
           <button class="login-btn fade-in">
             <span>로그인</span>
@@ -16,7 +16,15 @@
         </router-link>
       </div>
 
-      <div class="explore fade-in">
+      <div class="button-group fade-in" v-else>
+        <router-link to="/home">
+          <button class="login-btn fade-in">
+            <span>회고 작성</span>
+          </button>
+        </router-link>
+      </div>
+
+      <div class="explore fade-in" v-if="!isLoggedIn">
         <p>
           <router-link to="/home">
             <button class="explore-btn">둘러볼게요!</button>
@@ -30,7 +38,18 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+import { ref, onMounted } from 'vue';
+
+const isLoggedIn = ref(false); // 로그인 상태
+
+onMounted(() => {
+  const token = localStorage.getItem('accessToken');
+  isLoggedIn.value = !!token; // 토큰 존재 여부로 로그인 상태 판단
+});
+
+</script>
 
 <style>
 .hero {
