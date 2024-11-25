@@ -2,7 +2,6 @@
   <header :class="['header', { 'header-scrolled': isScrolled }]">
     <div class="header-content">
       <div class="logo" @click="reloadPage">
-        <!-- <img src="https://via.placeholder.com/100x50?text=Logo" alt="로고" /> -->
         <img src="`/images/logo3.png`" alt="로고" />
       </div>
     </div>
