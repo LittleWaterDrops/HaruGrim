@@ -103,6 +103,9 @@ public class ReviewsController {
                 String imageUrl = openAIUtil.generateImageFromReview(review.getTitle(), review.getContent());
                 imageUrls.add(imageUrl);
             }
+            
+//         // OpenAI를 사용하여 이미지 3개 생성 (n=3으로 설정)
+//            List<String> imageUrls = openAIUtil.generateImagesFromReview(review.getTitle(), review.getContent());
 
             return ResponseEntity.ok(imageUrls);
         } catch (Exception e) {
