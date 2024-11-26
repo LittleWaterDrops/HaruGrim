@@ -132,6 +132,7 @@ public class ReviewsController {
 		try {
 			Long userId = jwtUtil.validateAccessToken(extractToken(token)); // JWT에서 user_id 추출
 			List<Reviews> reviews = reviewsService.getReviewListByUserId(userId);
+			System.out.println(reviews);
 			return ResponseEntity.ok(reviews);
 		} catch (IllegalArgumentException | IllegalStateException e) {
 			return ResponseEntity.status(401).build(); // Unauthorized
