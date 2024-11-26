@@ -52,7 +52,7 @@
                 v-for="(item, index) in items"
                 :key="item.id"
                 :title="item.title"
-                :date="formatDateToYMD(item.updatedAt)"
+                :date="formatDateToYMD(item.updatedAt || new Date().toISOString())"
                 @click="openReviewView(item)"
                 :style="{ animationDelay: `${index * 50}ms` }"
                 class="accordion-item"
@@ -120,9 +120,7 @@
           <div class="review-view" :class="{ visible: isReviewViewOpen }">
             <h3 class="review-title">{{ selectedItem?.title }}</h3>
             <p class="review-meta">
-              작성일: <span class="date">{{ formatDate(selectedItem?.createdAt) }}</span
-              ><br />
-              수정일: <span class="date">{{ formatDate(selectedItem?.updatedAt) }}</span>
+              작성일: <span class="date">{{ formatDate(selectedItem?.createdAt) }}</span>
             </p>
             <img :src="selectedItem?.imageUrl" alt="이미지" class="review-image" />
             <p class="review-content">{{ selectedItem?.content }}</p>
@@ -359,7 +357,7 @@ const finalizeReview = async () => {
       title: reviewTitle.value,
       content: reviewContent.value,
       imageUrl: selectedImage.value, // 갤러리 리스트에서는 단일 이미지로 표시
-      createdAt: createdReview.createdAt,
+      createdAt: createdReview.createdAt || new Date().toISOString(),
       updatedAt: createdReview.updatedAt,
     })
     console.log(items.value)
