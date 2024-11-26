@@ -39,6 +39,11 @@
           <div class="loading-spinner"></div>
           <p>이미지를 생성 중입니다. 잠시만 기다려주세요...</p>
         </div>
+        <!-- 오디오 플레이어 -->
+        <audio ref="loadingAudio" autoplay loop>
+          <source src="/audio/loding.mp3" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
       </div>
     </transition>
 
@@ -139,6 +144,7 @@ import ViewToggle from '@/components/HomeView/ViewToggle.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import router from '@/router'
+const loadingAudio = ref<HTMLAudioElement | null>(null)
 
 const viewMode = ref<'list' | 'gallery'>('list')
 const isReviewFormOpen = ref(false)
@@ -156,12 +162,10 @@ const isViewActionsVisible = ref(false)
 const isContentVisible = ref(false)
 
 const formatDateToYMD = (dateString: string | undefined): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식 반환
-};
-
-
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0] // YYYY-MM-DD 형식 반환
+}
 
 const items = ref([
   {
@@ -248,21 +252,20 @@ const toggleViewMode = (view: 'list' | 'gallery') => {
 }
 
 const handleWriteButtonClick = () => {
-
   if (isReviewFormOpen.value || isReviewViewOpen.value) {
-    isReviewFormOpen.value = false;
-    isReviewViewOpen.value = false;
-    selectedItem.value = null;
-    resetReviewForm();
+    isReviewFormOpen.value = false
+    isReviewViewOpen.value = false
+    selectedItem.value = null
+    resetReviewForm()
   } else {
-    const token = localStorage.getItem('accessToken'); // Access Token 확인
+    const token = localStorage.getItem('accessToken') // Access Token 확인
 
     if (!token) {
-      alert('로그인 상태가 아닙니다. 회고 작성을 위해 로그인이 필요합니다.');
-      return;
+      alert('로그인 상태가 아닙니다. 회고 작성을 위해 로그인이 필요합니다.')
+      return
     }
 
-    isReviewFormOpen.value = true;
+    isReviewFormOpen.value = true
   }
 }
 
@@ -308,6 +311,9 @@ const submitReview = async () => {
 
   try {
     isSubmitting.value = true
+    // 오디오 요소 참조 및 재생
+    loadingAudio.value = document.querySelector('audio')
+    loadingAudio.value?.play()
 
     // 1. 이미지 3개 생성 요청
     const token = localStorage.getItem('accessToken')
@@ -327,6 +333,12 @@ const submitReview = async () => {
     alert('이미지 생성 중 문제가 발생했습니다.')
   } finally {
     isSubmitting.value = false
+
+    // 로딩 종료 시 음악 멈춤
+    if (loadingAudio.value) {
+      loadingAudio.value.pause()
+      loadingAudio.value.currentTime = 0 // 재생 위치 초기화
+    }
   }
 }
 
@@ -362,7 +374,7 @@ const finalizeReview = async () => {
     })
     console.log(items.value)
 
-    alert('회고가 작성되었습니다!')
+    // alert('회고가 작성되었습니다!')
     resetReviewForm()
   } catch (error) {
     console.error('회고 저장 중 오류:', error)
