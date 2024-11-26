@@ -41,7 +41,7 @@
         </div>
         <!-- 오디오 플레이어 -->
         <audio ref="loadingAudio" autoplay loop>
-          <source src="/audio/test.mp3" type="audio/mpeg" />
+          <source src="/audio/loding.mp3" type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       </div>
